@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,22 +17,22 @@
       position: absolute;
       background: #ff3380;
       color: white;
-      width: 24px;
-      height: 24px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       text-align: center;
-      line-height: 5vw;
-      font-size: 18px;
+      line-height: 48px; /* match height for vertical centering */
+      font-size: 32px; /* bigger font */
       user-select: none;
       cursor: pointer;
-      box-shadow: 0 0 10px #ff338088;
+      box-shadow: 0 0 15px #ff338088;
       animation: floatUpDown 6s ease-in-out infinite;
       transition: transform 0.3s ease;
     }
 
     .heart:hover {
       transform: scale(1.5);
-      box-shadow: 0 0 20px #ff66a3, 0 0 30px #ff66a3;
+      box-shadow: 0 0 30px #ff66a3, 0 0 40px #ff66a3;
       z-index: 1000;
     }
 
@@ -53,14 +52,21 @@
       position: fixed;
       bottom: 20px;
       left: 20px;
-      padding: 10px 15px;
+      padding: 14px 20px;
       background: #ff4d94;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       color: white;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 18px;
+      min-width: 70px;
       z-index: 2000;
+      user-select: none;
+      box-shadow: 0 0 8px #ff4d94cc;
+      transition: background 0.3s ease;
+    }
+    .back-btn:hover {
+      background: #ff3370;
     }
 
     h1 {
@@ -120,36 +126,46 @@
       "https://youtu.be/N3zu9NucyBg?si=29XvGjLCpO6YBhRt"
     ];
 
-    const numHearts = 120;  // total hearts on screen
+    const numHearts = 80;  // reduce to 80 so screen isn't too crowded on phone
     const body = document.body;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
-    for (let i = 0; i < numHearts; i++) {
-      const heart = document.createElement('a');
-      heart.classList.add('heart');
-      heart.textContent = '♡';
+    function createHearts() {
+      for (let i = 0; i < numHearts; i++) {
+        const heart = document.createElement('a');
+        heart.classList.add('heart');
+        heart.textContent = '♡';
 
-      // Random position
-      const x = Math.random() * (width - 24);
-      const y = Math.random() * (height - 24);
+        // Random position within viewport
+        const x = Math.random() * (width - 48);
+        const y = Math.random() * (height - 48);
 
-      heart.style.left = `${x}px`;
-      heart.style.top = `${y}px`;
+        heart.style.left = `${x}px`;
+        heart.style.top = `${y}px`;
 
-      // Random animation delay for float effect
-      heart.style.animationDelay = `${Math.random() * 6}s`;
+        // Random animation delay for float effect
+        heart.style.animationDelay = `${Math.random() * 6}s`;
 
-      // Cycle through the song links (wrap around)
-      heart.href = songs[i % songs.length];
-      heart.target = "_blank";
-      heart.title = "Click to listen";
+        // Link to songs
+        heart.href = songs[i % songs.length];
+        heart.target = "_blank";
+        heart.rel = "noopener noreferrer";  // safer opening
+        heart.title = "Click to listen";
 
-      body.appendChild(heart);
+        body.appendChild(heart);
+      }
     }
-  </script>
 
+    createHearts();
+
+    // Recalculate hearts positions if window resized (optional)
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      // Optionally, you can clear and recreate hearts here if you want
+    });
+  </script>
 
 </body>
 </html>
-
