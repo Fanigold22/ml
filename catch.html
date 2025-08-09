@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Catch the Hearts ❤️</title>
+<style>
+  body {
+    background: #0d0d0d;
+    color: #b22222; /* deep cherry red */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    user-select: none;
+  }
+  h1 {
+    margin: 20px 0 10px;
+    font-size: 2.8rem;
+    text-shadow: 0 0 8px #b22222cc;
+  }
+  #gameArea {
+    position: relative;
+    width: 90vw;
+    height: 70vh;
+    border: 2px solid #8b0000;
+    border-radius: 20px;
+    background: #330000;
+    box-shadow: 0 0 20px #8b0000cc;
+    overflow: hidden;
+  }
+  .heart {
+    position: absolute;
+    font-size: 40px;
+    color: #9b1c1c; /* softer cherry red */
+    cursor: pointer;
+    user-select: none;
+    animation: pulse 1s infinite ease-in-out;
+    text-shadow: 0 0 4px #7a1414aa;
+    transition: transform 0.15s;
+  }
+  .heart:active {
+    transform: scale(1.3);
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  #scoreboard, #highscore, #timer {
+    margin-top: 12px;
+    font-size: 1.3rem;
+    color: #a83333;
+    text-shadow: 0 0 6px #7a1414aa;
+  }
+  #difficulty {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #b22222;
+    background: #330000;
+    color: #b22222;
+    cursor: pointer;
+    user-select: none;
+  }
+  #startBtn {
+    margin-top: 20px;
+    padding: 12px 28px;
+    border-radius: 40px;
+    border: none;
+    background: #8b0000;
+    color: #ffcccc;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px #8b0000aa;
+    transition: background 0.3s, box-shadow 0.3s;
+    user-select: none;
+  }
+  #startBtn:hover {
+    background: #a22222;
+    box-shadow: 0 0 25px #a22222cc;
+  }
+  #finalMessage {
+    margin-top: 20px;
+    font-size: 1.4rem;
+    color: #cc9999;
+    text-shadow: 0 0 6px #7a1414aa;
+    min-height: 1.5em;
+  }
+</style>
+</head>
+<body>
+
+<h1>Catch the Hearts ❤️</h1>
+
+<select id="difficulty" aria-label="Select difficulty level">
+  <option value="easy">Easy (Hearts every 1.2s)</option>
+  <option value="medium" selected>Medium (Hearts every 0.7s)</option>
+  <option value="hard">Hard (Hearts every 0.4s)</option>
+</select>
+
+<div id="gameArea" aria-label="Catch the floating hearts game area"></div>
+
+<div id="scoreboard">Score: 0</div>
+<div id="highscore">High Score: 0</div>
+<div id="timer">Time: 30s</div>
+
+<button id="startBtn" aria-label="Start the Catch the Hearts game">Start Game</button>
+
+<div id="finalMessage" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+  const gameArea = document.getElementById('gameArea');
+  const scoreboard = document.getElementById('scoreboard');
+  const highscoreEl = document.getElementById('highscore');
+  const timerEl = document.getElementById('timer');
+  const startBtn = document.getElementById('startBtn');
+  const finalMessage = document.getElementById('finalMessage');
+  const difficultySelect = document.getElementById('difficulty');
+
+  let score = 0;
+  let timeLeft = 30;
+  let gameInterval;
+  let heartInterval;
+  let gameActive = false;
+  let heartSpawnDelay = 700; // default medium difficulty
+
+  // Load high score from localStorage
+  let highScore = localStorage.getItem('catchHeartsHighScore') || 0;
+  highscoreEl.textContent = `High Score: ${highScore}`;
+
+  difficultySelect.addEventListener('change', () => {
+    const val = difficultySelect.value;
+    if(val === 'easy') heartSpawnDelay = 1200;
+    else if(val === 'medium') heartSpawnDelay = 700;
+    else if(val === 'hard') heartSpawnDelay = 400;
+  });
+
+  function randomPosition() {
+    const maxX = gameArea.clientWidth - 40; // heart width approx 40px
+    const maxY = gameArea.clientHeight - 40;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    return {x, y};
+  }
+
+  function createHeart() {
+    if (!gameActive) return;
+
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.textContent = '❤️';
+    const {x, y} = randomPosition();
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+
+    heart.addEventListener('click', () => {
+      if (!gameActive) return;
+      score++;
+      scoreboard.textContent = `Score: ${score}`;
+      heart.remove();
+    });
+
+    gameArea.appendChild(heart);
+
+    setTimeout(() => {
+      if (heart.parentNode) heart.remove();
+    }, 1500);
+  }
+
+  function updateTimer() {
+    if(timeLeft <= 0) {
+      endGame();
+      return;
+    }
+    timeLeft--;
+    timerEl.textContent = `Time: ${timeLeft}s`;
+  }
+
+  function startGame() {
+    if (gameActive) return;
+    score = 0;
+    timeLeft = 30;
+    scoreboard.textContent = `Score: ${score}`;
+    timerEl.textContent = `Time: ${timeLeft}s`;
+    finalMessage.textContent = '';
+    gameActive = true;
+
+    // Clear existing hearts
+    gameArea.innerHTML = '';
+
+    // Spawn hearts according to difficulty
+    heartInterval = setInterval(createHeart, heartSpawnDelay);
+
+    // Update timer every second
+    gameInterval = setInterval(updateTimer, 1000);
+
+    startBtn.disabled = true;
+    difficultySelect.disabled = true;
+  }
+
+  function endGame() {
+    gameActive = false;
+    clearInterval(gameInterval);
+    clearInterval(heartInterval);
+
+    if(score > highScore){
+      highScore = score;
+      localStorage.setItem('catchHeartsHighScore', highScore);
+      highscoreEl.textContent = `High Score: ${highScore}`;
+      finalMessage.textContent = `New high score! You caught ${score} hearts. ❤️🔥`;
+    } else {
+      finalMessage.textContent = `Game over! You caught ${score} hearts. ❤️`;
+    }
+
+    startBtn.disabled = false;
+    difficultySelect.disabled = false;
+  }
+
+  startBtn.addEventListener('click', startGame);
+
+</script>
+
+</body>
+</html>

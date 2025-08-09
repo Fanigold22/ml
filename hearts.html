@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Endless Floating Hearts 💖</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      overflow: hidden;
+      height: 100vh;
+      font-family: 'Courier New', monospace;
+      position: relative;
+    }
+
+    .heart {
+      position: absolute;
+      background: #ff3380;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 24px;
+      font-size: 18px;
+      user-select: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff338088;
+      animation: floatUpDown 6s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    .heart:hover {
+      transform: scale(1.5);
+      box-shadow: 0 0 20px #ff66a3, 0 0 30px #ff66a3;
+      z-index: 1000;
+    }
+
+    @keyframes floatUpDown {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-30px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .back-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      padding: 10px 15px;
+      background: #ff4d94;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      z-index: 2000;
+    }
+
+    h1 {
+      position: fixed;
+      width: 100%;
+      top: 10px;
+      text-align: center;
+      color: #ff4d94;
+      font-size: 28px;
+      animation: glow 2s infinite alternate;
+      user-select: none;
+      z-index: 2000;
+      font-family: 'Courier New', monospace;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #ff3380, 0 0 10px #ff3380;
+      }
+      to {
+        text-shadow: 0 0 20px #ff3380, 0 0 40px #ff66a3;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Songs that remind me of you</h1>
+  <button class="back-btn" onclick="location.href='ml.html'">← Back</button>
+
+  <script>
+    const songs = [
+      "https://youtu.be/laDnsiKURTQ?si=rm05sk4QP2fuROoO",
+      "https://youtu.be/hewtBwbfHEE?si=AL6DCYEC5c4WjevL",
+      "https://youtu.be/uXRvmkQLyTc?si=qRDvcZjUT651WuC6",
+      "https://youtu.be/9BznFjbcBVs?si=pH95Q1e3BTGrXEut",
+      "https://youtu.be/5tc0gLSSU1M?si=jHpEtRi73pylR-E1",
+      "https://youtu.be/SHAqAO7w8M8?si=5FXfi0zDaTy_P1WM",
+      "https://youtu.be/pZ31pyTZdh0?si=fj1KBK-GkMO33mbV",
+      "https://youtu.be/QI8VrXkffcg?si=m3E5axmTxHuQafXi",
+      "https://youtu.be/SQdgdWayPhQ?si=EQbmw57-oPMlpFjY",
+      "https://youtu.be/HMYyn7wEfKQ?si=i3rvVdIY8GKVGnWY",
+      "https://youtu.be/-5_tGEao_GQ?si=6kLq-oRVQnzfIzt7",
+      "https://youtu.be/UV9Nx6TL72U?si=x_3cjLsDgepgt2NX",
+      "https://youtu.be/hGzHCvkndnI?si=wMQRwDnf0uAbAAIi",
+      "https://youtu.be/yUcIaHh4HEA?si=zonuGDCA13fyamDX",
+      "https://youtu.be/GFZDppnDKCo?si=I6W_YQ5zT7VCY97K",
+      "https://youtu.be/1RRFil0otNM?si=TLG45irL5-yzqNs1",
+      "https://youtu.be/GHQhNlgBDg8?si=MnXgq-Zf06_sgn2O",
+      "https://youtu.be/-CQ4yr9o0qM?si=pHRYhi6-7nHsUvek",
+      "https://youtu.be/B23ifNgxnas?si=lEX3IJq5f3I7Xmjg",
+      "https://youtu.be/B9NokdAGVvw?si=LGqSG2I_3XhZx0Yt",
+      "https://youtu.be/jvTXuTugCFI?si=D-n7g5mq2UFVpSkw",
+      "https://youtu.be/_R3B2Xr8kwQ?si=t3AiudvCU0UCI0Fm",
+      "https://youtu.be/soIdnMFl5vE?si=XcwYlYwqfMfAlOAU",
+      "https://youtu.be/7FtbrDFgB_4?si=ZLgsBAQIjn3u9o5U",
+      "https://youtu.be/N3zu9NucyBg?si=29XvGjLCpO6YBhRt"
+    ];
+
+    const numHearts = 100;  // total hearts on screen
+    const body = document.body;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    for (let i = 0; i < numHearts; i++) {
+      const heart = document.createElement('a');
+      heart.classList.add('heart');
+      heart.textContent = '♡';
+
+      // Random position
+      const x = Math.random() * (width - 24);
+      const y = Math.random() * (height - 24);
+
+      heart.style.left = `${x}px`;
+      heart.style.top = `${y}px`;
+
+      // Random animation delay for float effect
+      heart.style.animationDelay = `${Math.random() * 6}s`;
+
+      // Cycle through the song links (wrap around)
+      heart.href = songs[i % songs.length];
+      heart.target = "_blank";
+      heart.title = "Click to listen";
+
+      body.appendChild(heart);
+    }
+  </script>
+
+
+</body>
+</html>

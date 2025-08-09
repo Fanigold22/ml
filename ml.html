@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Time Together ❤️</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      background: #0a0a0a; /* pure black */
+      color: #ff3333; /* bright red */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+    }
+
+    /* Floating hearts container */
+    #hearts-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    /* Heart style */
+    .heart {
+      position: absolute;
+      color: #8b0000; /* dark red */
+      font-size: 20px;
+      user-select: none;
+      animation-name: floatUpDown;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      text-shadow: 0 0 6px #ff0000cc;
+    }
+
+    @keyframes floatUpDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-28px); }
+    }
+
+    /* Content container */
+    #content {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 4rem;
+      text-shadow: 0 0 20px #ff1a1a;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-weight: 400;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      color: #cc0000;
+      text-shadow: 0 0 15px #cc0000cc;
+    }
+    p {
+      font-size: 1.2rem;
+      max-width: 450px;
+      line-height: 1.5;
+      color: #ff6666;
+      margin-bottom: 40px;
+    }
+
+    /* Timer text */
+    #timer {
+      font-family: monospace;
+      font-size: 1.5rem;
+      color: #ff4d4d;
+      text-shadow: 0 0 10px #cc0000aa;
+      margin-bottom: 50px;
+      letter-spacing: 2px;
+    }
+
+    /* Play music button */
+    #play-music {
+      background: #8b0000;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 20px #b22222cc;
+      transition: background 0.3s;
+      user-select: none;
+    }
+    #play-music:hover {
+      background: #550000;
+      box-shadow: 0 0 35px #880000cc;
+    }
+
+    /* Navigation link to songs page */
+    #songs-link {
+      margin-top: 30px;
+      font-size: 1rem;
+      color: #ff6666;
+      cursor: pointer;
+      text-decoration: underline;
+      user-select: none;
+    }
+    #songs-link:hover {
+      color: #ff1a1a;
+    }
+
+  </style>
+</head>
+<body>
+  
+<style>
+  #passwordOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #0a0a0a;
+    color: #ff3333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #passwordInput {
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    border: 2px solid #ff3333;
+    background: #1a0000;
+    color: #ff6666;
+    margin-top: 10px;
+  }
+  #submitPassword {
+    margin-top: 15px;
+    padding: 10px 25px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    border: none;
+    background: #8b0000;
+    color: white;
+    cursor: pointer;
+  }
+  #passwordError {
+    margin-top: 10px;
+    color: #ff4444;
+    font-size: 1rem;
+    display: none;
+  }
+</style>
+
+<div id="passwordOverlay">
+  <label for="passwordInput">Enter Password to Access</label>
+  <input type="password" id="passwordInput" autocomplete="off" />
+  <button id="submitPassword">Enter</button>
+  <div id="passwordError">Incorrect password, try again.</div>
+</div>
+
+<script>
+  const passwordOverlay = document.getElementById('passwordOverlay');
+  const passwordInput = document.getElementById('passwordInput');
+  const submitBtn = document.getElementById('submitPassword');
+  const errorMsg = document.getElementById('passwordError');
+  const correctPassword = '240425';
+
+  function checkPassword() {
+    if(passwordInput.value === correctPassword) {
+      passwordOverlay.style.display = 'none';
+    } else {
+      errorMsg.style.display = 'block';
+      passwordInput.value = '';
+    }
+  }
+
+  submitBtn.addEventListener('click', checkPassword);
+  passwordInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+</script>
+
+<div id="hearts-container"></div>
+
+  <div id="content">
+    <h1>Our Time Together</h1>
+    <h2>5 Months of Magic </h2>
+    <div id="timer">Calculating...</div>
+    <p>Every moment with you has been a beautiful story I never want to end. Here’s to many more months of laughter, love, and us.</p>
+    <button id="play-music">press me. now.</button>
+    <div id="songs-link">songs that remind me of you</div>
+    <a href="games.html" target="_blank" style="color: #a00000; text-decoration: underline; font-size: 18px; cursor: pointer;">
+    click here for something fun ♥
+</a>
+
+    </div>
+
+  <audio id="bg-music" loop>
+    <source src="audio/I will.mp3" type="audio/mp3" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+
+    // Floating hearts logic
+    const heartsContainer = document.getElementById('hearts-container');
+    const numHearts = 40;
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    for (let i = 0; i < numHearts; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.textContent = '❤';
+      heart.style.left = randomRange(0, 100) + 'vw';
+      heart.style.top = randomRange(0, 100) + 'vh';
+      heart.style.fontSize = randomRange(15, 30) + 'px';
+      heart.style.animationDuration = randomRange(4, 8) + 's';
+      heart.style.animationDelay = randomRange(0, 8) + 's';
+      heartsContainer.appendChild(heart);
+    }
+
+    // Timer logic for 5 months from March 24, 2025
+    const timer = document.getElementById('timer');
+    const startDate = new Date('2025-03-24T00:00:00');
+
+    function updateTimer() {
+      const now = new Date();
+      let diff = now - startDate;
+
+      const months = 5; // fixed 5 months
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff -= days * (1000 * 60 * 60 * 24);
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      diff -= hours * (1000 * 60 * 60);
+
+      const minutes = Math.floor(diff / (1000 * 60));
+      diff -= minutes * (1000 * 60);
+
+      const seconds = Math.floor(diff / 1000);
+
+      timer.textContent = `${days} days, ${hours}h ${minutes}m ${seconds}s`;
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Music play button
+    const playBtn = document.getElementById('play-music');
+    const bgMusic = document.getElementById('bg-music');
+
+    let musicPlaying = false;
+
+    playBtn.addEventListener('click', () => {
+      if (!musicPlaying) {
+        bgMusic.play();
+        musicPlaying = true;
+        playBtn.textContent = '❤️ playing...';
+      } else {
+        bgMusic.pause();
+        musicPlaying = false;
+        playBtn.textContent = 'press me. now.';
+      }
+    });
+
+    // Songs page redirect
+    document.getElementById('songs-link').addEventListener('click', () => {
+      window.location.href = 'hearts.html';
+    });
+  </script>
+</body>
+</html>

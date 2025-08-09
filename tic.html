@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hearts in a Row ❤️⭐</title>
+<style>
+  body {
+    background: #0d0d0d;
+    color: #ff4d4d;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    user-select: none;
+    min-height: 100vh;
+    margin: 0;
+  }
+  h1 {
+    margin-bottom: 15px;
+    font-size: 2.8rem;
+    text-shadow: 0 0 10px #ff1a1a;
+  }
+  #modeSelect {
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #ff4d4d;
+    background: #330000;
+    color: #ff9999;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+  #modeSelect:hover {
+    background: #ff4d4d;
+    color: #330000;
+  }
+  #board {
+    display: grid;
+    grid-template-columns: repeat(3, 110px);
+    grid-template-rows: repeat(3, 110px);
+    gap: 15px;
+    box-shadow: 0 0 30px #cc0000aa;
+    padding: 20px;
+    border-radius: 20px;
+    background: #2b0000;
+  }
+  .cell {
+    background: linear-gradient(145deg, #550000, #330000);
+    border-radius: 20px;
+    font-size: 4rem;
+    color: #ff4d4d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: inset 0 0 8px #ff0000cc;
+    transition: background 0.3s, transform 0.15s;
+    user-select: none;
+  }
+  .cell:hover {
+    background: linear-gradient(145deg, #ff1a1a, #b30000);
+    transform: scale(1.1);
+  }
+  #status {
+    margin-top: 25px;
+    font-size: 1.3rem;
+    text-shadow: 0 0 8px #ff4d4d;
+    min-height: 1.4em;
+  }
+  #restartBtn {
+    margin-top: 20px;
+    padding: 12px 28px;
+    border-radius: 40px;
+    border: none;
+    background: #cc0000;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 0 20px #cc0000aa;
+    transition: background 0.3s, box-shadow 0.3s;
+    user-select: none;
+  }
+  #restartBtn:hover {
+    background: #ff1a1a;
+    box-shadow: 0 0 30px #ff4d4dcc;
+  }
+</style>
+</head>
+<body>
+
+<h1>Hearts in a Row ❤️⭐</h1>
+
+<label for="modeSelect">Choose opponent:</label>
+<select id="modeSelect" aria-label="Choose opponent mode">
+  <option value="twoPlayer">Two Players</option>
+  <option value="bot">Play vs Bot</option>
+</select>
+
+<div id="board" role="grid" aria-label="Tic Tac Toe Board"></div>
+
+<div id="status" aria-live="polite"></div>
+<button id="restartBtn" aria-label="Restart game">Restart Game</button>
+
+<script>
+  const boardEl = document.getElementById('board');
+  const statusEl = document.getElementById('status');
+  const restartBtn = document.getElementById('restartBtn');
+  const modeSelect = document.getElementById('modeSelect');
+
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let currentPlayer = '❤️'; // Human always starts as Hearts
+  let gameActive = true;
+  let vsBot = false;
+  let botThinking = false;
+
+  const winningConditions = [
+    [0,1,2],[3,4,5],[6,7,8],  // Rows
+    [0,3,6],[1,4,7],[2,5,8],  // Columns
+    [0,4,8],[2,4,6]           // Diagonals
+  ];
+
+  function createBoard() {
+    boardEl.innerHTML = '';
+    for(let i=0; i<9; i++){
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.setAttribute('data-index', i);
+      cell.setAttribute('role', 'button');
+      cell.setAttribute('tabindex', '0');
+      cell.setAttribute('aria-label', `Cell ${i+1}, ${board[i] ? board[i] : 'empty'}`);
+      cell.addEventListener('click', handleCellClick);
+      cell.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCellClick(e);
+        }
+      });
+      cell.textContent = board[i];
+      if(board[i] === '⭐') cell.style.color = '#ffd700';
+      else if(board[i] === '❤️') cell.style.color = '#ff4d4d';
+      boardEl.appendChild(cell);
+    }
+  }
+
+  function handleCellClick(e) {
+    if (botThinking) return; // prevent clicking while bot is thinking
+
+    const idx = e.target.getAttribute('data-index');
+    if (board[idx] !== '' || !gameActive) return;
+
+    if(vsBot && currentPlayer !== '❤️') return; // if vs bot, only allow human (hearts) to play on their turn
+
+    makeMove(idx, currentPlayer);
+    if (checkWin(currentPlayer)) {
+      statusEl.textContent = `${currentPlayer} wins! 🎉`;
+      gameActive = false;
+      return;
+    }
+    if (board.every(cell => cell !== '')) {
+      statusEl.textContent = `It's a tie! 🤝`;
+      gameActive = false;
+      return;
+    }
+
+    switchTurn();
+  }
+
+  function makeMove(index, player) {
+    board[index] = player;
+    createBoard();
+  }
+
+  function checkWin(player) {
+    return winningConditions.some(condition => {
+      return condition.every(idx => board[idx] === player);
+    });
+  }
+
+  function switchTurn() {
+    currentPlayer = currentPlayer === '❤️' ? '⭐' : '❤️';
+    statusEl.textContent = `Turn: ${currentPlayer}`;
+
+    if(vsBot && currentPlayer === '⭐' && gameActive){
+      botThinking = true;
+      setTimeout(botMove, 700);
+    }
+  }
+
+  function botMove() {
+    let available = board
+      .map((val, idx) => val === '' ? idx : null)
+      .filter(val => val !== null);
+
+    // Bot tries to win if possible
+    for(let idx of available) {
+      board[idx] = '⭐';
+      if(checkWin('⭐')) {
+        makeMove(idx, '⭐');
+        endGame('⭐');
+        botThinking = false;
+        return;
+      }
+      board[idx] = '';
+    }
+    // Bot blocks player if needed
+    for(let idx of available) {
+      board[idx] = '❤️';
+      if(checkWin('❤️')) {
+        board[idx] = '⭐';
+        makeMove(idx, '⭐');
+        botThinking = false;
+        switchTurn();
+        return;
+      }
+      board[idx] = '';
+    }
+
+    // Bot picks random move otherwise
+    const move = available[Math.floor(Math.random() * available.length)];
+    makeMove(move, '⭐');
+
+    if (checkWin('⭐')) {
+      endGame('⭐');
+      botThinking = false;
+      return;
+    }
+    if (board.every(cell => cell !== '')) {
+      statusEl.textContent = `It's a tie! 🤝`;
+      gameActive = false;
+      botThinking = false;
+      return;
+    }
+    botThinking = false;
+    switchTurn();
+  }
+
+  function endGame(winner) {
+    statusEl.textContent = `${winner} wins! 🎉`;
+    gameActive = false;
+  }
+
+  restartBtn.addEventListener('click', () => {
+    board = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = '❤️';
+    gameActive = true;
+    botThinking = false;
+    statusEl.textContent = `Turn: ${currentPlayer}`;
+    createBoard();
+  });
+
+  modeSelect.addEventListener('change', () => {
+    vsBot = modeSelect.value === 'bot';
+    restartBtn.click();
+  });
+
+  // Initialize
+  createBoard();
+  statusEl.textContent = `Turn: ${currentPlayer}`;
+</script>
+
+</body>
+</html>
