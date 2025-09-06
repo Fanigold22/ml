@@ -299,64 +299,106 @@
   let pieces = [], placedCount = 0;
 
 // ===== 16-PIECE PUZZLE WITH TOUCH SUPPORT =====
+// 16-piece puzzle
+const puzzleContainer = document.getElementById('puzzle-container');
+const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
+let placedCount = 0;
+
+// Create pieces
 for (let i = 0; i < 16; i++) {
   const piece = document.createElement('img');
   piece.classList.add('puzzle-piece');
   piece.src = `images/puzzle/piece_${i}.png`;
   piece.dataset.index = i;
+
   piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
   piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
+
   puzzleContainer.appendChild(piece);
-  pieces.push(piece);
 
-  function startDrag(clientX, clientY) {
-    if (piece.classList.contains('correct')) return;
+  // Make draggable function
+  function makePieceDraggable(el) {
+    let shiftX, shiftY;
 
-    piece.style.zIndex = 10003;
-    const shiftX = clientX - piece.getBoundingClientRect().left;
-    const shiftY = clientY - piece.getBoundingClientRect().top;
+    // Desktop drag
+    el.onmousedown = function(e) {
+      if(el.classList.contains('correct')) return;
 
-    function moveAt(x, y) {
-      piece.style.left = x - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
-      piece.style.top = y - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
-    }
+      shiftX = e.clientX - el.getBoundingClientRect().left;
+      shiftY = e.clientY - el.getBoundingClientRect().top;
+      el.style.zIndex = 10003;
+      el.style.cursor = 'grabbing';
 
-    function onMouseMove(e) { moveAt(e.clientX, e.clientY); }
-    function onMouseUp() {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      checkCorrectPosition();
-    }
+      function moveAt(e) {
+        el.style.left = e.clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
+        el.style.top = e.clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+      }
 
-    function onTouchMove(e) {
-      moveAt(e.touches[0].clientX, e.touches[0].clientY);
-    }
+      function onMouseUp() {
+        document.removeEventListener('mousemove', moveAt);
+        document.removeEventListener('mouseup', onMouseUp);
+        el.style.cursor = 'grab';
+        checkPiecePosition(el);
+      }
 
-    function onTouchEnd() {
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
-      checkCorrectPosition();
-    }
+      document.addEventListener('mousemove', moveAt);
+      document.addEventListener('mouseup', onMouseUp);
+    };
 
-    function checkCorrectPosition() {
-      const correctRow = Math.floor(piece.dataset.index / cols);
-      const correctCol = piece.dataset.index % cols;
-      const correctX = correctCol * pieceWidth;
-      const correctY = correctRow * pieceHeight;
+    // Touch drag
+    el.addEventListener('touchstart', function(e) {
+      if(el.classList.contains('correct')) return;
 
-      if (Math.abs(parseInt(piece.style.left) - correctX) < 15 &&
-          Math.abs(parseInt(piece.style.top) - correctY) < 15) {
-        piece.style.left = correctX + 'px';
-        piece.style.top = correctY + 'px';
-        piece.classList.add('correct');
-        piece.style.zIndex = 10002;
-        placedCount++;
-        if (placedCount === 16) {
-          confetti({ particleCount: 300, spread: 160, origin: { y: 0.5 } });
-          alert("🎉 Puzzle completed!");
-        }
+      const touch = e.touches[0];
+      shiftX = touch.clientX - el.getBoundingClientRect().left;
+      shiftY = touch.clientY - el.getBoundingClientRect().top;
+      el.style.zIndex = 10003;
+
+      function moveAt(touch) {
+        el.style.left = touch.clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
+        el.style.top = touch.clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+      }
+
+      function onTouchMove(e) {
+        moveAt(e.touches[0]);
+      }
+
+      function onTouchEnd() {
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        checkPiecePosition(el);
+      }
+
+      document.addEventListener('touchmove', onTouchMove);
+      document.addEventListener('touchend', onTouchEnd);
+    });
+
+    el.ondragstart = () => false;
+  }
+
+  // Check if piece is close to correct position
+  function checkPiecePosition(el) {
+    const correctRow = Math.floor(el.dataset.index / cols);
+    const correctCol = el.dataset.index % cols;
+    const correctX = correctCol * pieceWidth;
+    const correctY = correctRow * pieceHeight;
+
+    if (Math.abs(parseInt(el.style.left) - correctX) < 15 && Math.abs(parseInt(el.style.top) - correctY) < 15) {
+      el.style.left = correctX + 'px';
+      el.style.top = correctY + 'px';
+      el.classList.add('correct');
+      el.style.zIndex = 10002;
+      placedCount++;
+      if(placedCount === 16){
+        confetti({particleCount:300, spread:160, origin:{y:0.5}});
+        alert("🎉 Puzzle completed!");
       }
     }
+  }
+
+  makePieceDraggable(piece);
+}
+
 
     // Desktop
     document.addEventListener('mousemove', onMouseMove);
@@ -457,6 +499,7 @@ for (let i = 0; i < 16; i++) {
 
 </body>
 </html>
+
 
 
 
