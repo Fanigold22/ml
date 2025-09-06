@@ -354,31 +354,30 @@ function makeDraggable(el) {
 makeDraggable(document.getElementById('left-img'));
 makeDraggable(document.getElementById('right-img'));
     function adjustSideImagesForMobile() {
-  if (window.innerWidth < 768) { // small screens
-    document.getElementById('left-img').style.width = '60px';
-    document.getElementById('right-img').style.width = '90px';
-    document.getElementById('left-img').style.height = 'auto';
-    document.getElementById('right-img').style.height = 'auto';
-  } else {
-    // Default sizes for desktop
-    document.getElementById('left-img').style.width = '80px';
-    document.getElementById('right-img').style.width = '120px';
-    document.getElementById('left-img').style.height = 'auto';
-    document.getElementById('right-img').style.height = 'auto';
+  const left = document.getElementById('left-img');
+  const right = document.getElementById('right-img');
+
+  if (window.innerWidth < 768) { // mobile
+    left.style.width = '60px';
+    right.style.width = '90px';
+  } else { // desktop
+    left.style.width = '80px';
+    right.style.width = '120px';
   }
+
+  left.style.height = 'auto';
+  right.style.height = 'auto';
 }
 
-// Run on page load
+// Run on load and resize
 adjustSideImagesForMobile();
-
-// Run on window resize
 window.addEventListener('resize', adjustSideImagesForMobile);
-
 
   </script>
 
 </body>
 </html>
+
 
 
 
