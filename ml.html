@@ -293,186 +293,111 @@
     setTimeout(() => { window.open("http://www.staggeringbeauty.com/", "_blank"); }, 2000);
   }
 
-  // ===== 16-PIECE PUZZLE =====
+  // ===== 16-PIECE PUZZLE (Desktop + Touch) =====
   const puzzleContainer = document.getElementById('puzzle-container');
   const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
-  let pieces = [], placedCount = 0;
+  let placedCount = 0;
 
-// ===== 16-PIECE PUZZLE WITH TOUCH SUPPORT =====
-// 16-piece puzzle
-const puzzleContainer = document.getElementById('puzzle-container');
-const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
-let placedCount = 0;
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement('img');
+    piece.classList.add('puzzle-piece');
+    piece.src = `images/puzzle/piece_${i}.png`;
+    piece.dataset.index = i;
 
-// Create pieces
-for (let i = 0; i < 16; i++) {
-  const piece = document.createElement('img');
-  piece.classList.add('puzzle-piece');
-  piece.src = `images/puzzle/piece_${i}.png`;
-  piece.dataset.index = i;
+    piece.style.position = 'absolute';
+    piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
+    piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
+    piece.style.cursor = 'grab';
+    puzzleContainer.appendChild(piece);
 
-  piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
-  piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
+    function makePieceDraggable(el) {
+      let shiftX, shiftY;
 
-  puzzleContainer.appendChild(piece);
-
-  // Make draggable function
-  function makePieceDraggable(el) {
-    let shiftX, shiftY;
-
-    // Desktop drag
-    el.onmousedown = function(e) {
-      if(el.classList.contains('correct')) return;
-
-      shiftX = e.clientX - el.getBoundingClientRect().left;
-      shiftY = e.clientY - el.getBoundingClientRect().top;
-      el.style.zIndex = 10003;
-      el.style.cursor = 'grabbing';
-
-      function moveAt(e) {
-        el.style.left = e.clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
-        el.style.top = e.clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+      function startDrag(clientX, clientY) {
+        if (el.classList.contains('correct')) return;
+        shiftX = clientX - el.getBoundingClientRect().left;
+        shiftY = clientY - el.getBoundingClientRect().top;
+        el.style.zIndex = 10003;
+        el.style.cursor = 'grabbing';
       }
 
-      function onMouseUp() {
-        document.removeEventListener('mousemove', moveAt);
-        document.removeEventListener('mouseup', onMouseUp);
+      function moveDrag(clientX, clientY) {
+        el.style.left = clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
+        el.style.top = clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+      }
+
+      function endDrag() {
         el.style.cursor = 'grab';
         checkPiecePosition(el);
       }
 
-      document.addEventListener('mousemove', moveAt);
-      document.addEventListener('mouseup', onMouseUp);
-    };
+      function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
+      function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
+      function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
+      function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
 
-    // Touch drag
-    el.addEventListener('touchstart', function(e) {
-      if(el.classList.contains('correct')) return;
+      el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
+      el.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); document.addEventListener('touchmove', onTouchMove); document.addEventListener('touchend', onTouchEnd); });
 
-      const touch = e.touches[0];
-      shiftX = touch.clientX - el.getBoundingClientRect().left;
-      shiftY = touch.clientY - el.getBoundingClientRect().top;
-      el.style.zIndex = 10003;
+      el.ondragstart = () => false;
+    }
 
-      function moveAt(touch) {
-        el.style.left = touch.clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
-        el.style.top = touch.clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
-      }
+    function checkPiecePosition(el) {
+      const correctRow = Math.floor(el.dataset.index / cols);
+      const correctCol = el.dataset.index % cols;
+      const correctX = correctCol * pieceWidth;
+      const correctY = correctRow * pieceHeight;
 
-      function onTouchMove(e) {
-        moveAt(e.touches[0]);
-      }
-
-      function onTouchEnd() {
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', onTouchEnd);
-        checkPiecePosition(el);
-      }
-
-      document.addEventListener('touchmove', onTouchMove);
-      document.addEventListener('touchend', onTouchEnd);
-    });
-
-    el.ondragstart = () => false;
-  }
-
-  // Check if piece is close to correct position
-  function checkPiecePosition(el) {
-    const correctRow = Math.floor(el.dataset.index / cols);
-    const correctCol = el.dataset.index % cols;
-    const correctX = correctCol * pieceWidth;
-    const correctY = correctRow * pieceHeight;
-
-    if (Math.abs(parseInt(el.style.left) - correctX) < 15 && Math.abs(parseInt(el.style.top) - correctY) < 15) {
-      el.style.left = correctX + 'px';
-      el.style.top = correctY + 'px';
-      el.classList.add('correct');
-      el.style.zIndex = 10002;
-      placedCount++;
-      if(placedCount === 16){
-        confetti({particleCount:300, spread:160, origin:{y:0.5}});
-        alert("🎉 Puzzle completed!");
+      if (Math.abs(parseInt(el.style.left) - correctX) < 15 && Math.abs(parseInt(el.style.top) - correctY) < 15) {
+        el.style.left = correctX + 'px';
+        el.style.top = correctY + 'px';
+        el.classList.add('correct');
+        el.style.zIndex = 10002;
+        placedCount++;
+        if(placedCount === 16){
+          confetti({particleCount:300, spread:160, origin:{y:0.5}});
+          alert("🎉 Puzzle completed!");
+        }
       }
     }
+
+    makePieceDraggable(piece);
   }
 
-  makePieceDraggable(piece);
-}
-
-
-    // Desktop
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-    // Mobile
-    document.addEventListener('touchmove', onTouchMove);
-    document.addEventListener('touchend', onTouchEnd);
-
-    piece.ondragstart = () => false;
-  }
-
-  // Start drag events
-  piece.onmousedown = e => startDrag(e.clientX, e.clientY);
-  piece.ontouchstart = e => startDrag(e.touches[0].clientX, e.touches[0].clientY);
-}
-
-
-  // ===== MAKE ELEMENTS DRAGGABLE (IMAGES) =====
-  function makeDraggable(el) {
+  // ===== MAKE ELEMENTS DRAGGABLE (SIDE IMAGES) =====
+  function makeDraggable(el, floatAnimation) {
     let shiftX, shiftY;
 
-    el.onmousedown = function(e) {
+    function startDrag(clientX, clientY) {
+      shiftX = clientX - el.getBoundingClientRect().left;
+      shiftY = clientY - el.getBoundingClientRect().top;
       el.style.animation = 'none';
       el.style.cursor = 'grabbing';
+    }
 
-      shiftX = e.clientX - el.getBoundingClientRect().left;
-      shiftY = e.clientY - el.getBoundingClientRect().top;
+    function moveDrag(clientX, clientY) {
+      el.style.left = clientX - shiftX + 'px';
+      el.style.top = clientY - shiftY + 'px';
+    }
 
-      function moveAt(e) {
-        el.style.left = e.clientX - shiftX + 'px';
-        el.style.top = e.clientY - shiftY + 'px';
-      }
+    function endDrag() {
+      el.style.cursor = 'grab';
+      if (floatAnimation) el.style.animation = floatAnimation;
+    }
 
-      function onMouseUp() {
-        document.removeEventListener('mousemove', moveAt);
-        document.removeEventListener('mouseup', onMouseUp);
-        el.style.cursor = 'grab';
-        if (el.id === 'left-img') el.style.animation = 'floatSide 4s ease-in-out infinite';
-        if (el.id === 'right-img') el.style.animation = 'floatSide 5s ease-in-out infinite';
-      }
+    function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
+    function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
+    function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
+    function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
 
-      document.addEventListener('mousemove', moveAt);
-      document.addEventListener('mouseup', onMouseUp);
-    };
+    el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
+    el.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); document.addEventListener('touchmove', onTouchMove); document.addEventListener('touchend', onTouchEnd); });
 
     el.ondragstart = () => false;
-
-    // TOUCH SUPPORT
-    el.addEventListener('touchstart', function(e) {
-      e.preventDefault();
-      const touch = e.touches[0];
-      let shiftX = touch.clientX - el.getBoundingClientRect().left;
-      let shiftY = touch.clientY - el.getBoundingClientRect().top;
-
-      function moveAt(touch) {
-        el.style.left = touch.clientX - shiftX + 'px';
-        el.style.top = touch.clientY - shiftY + 'px';
-      }
-
-      function onTouchMove(e) { moveAt(e.touches[0]); }
-      function onTouchEnd() {
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', onTouchEnd);
-        el.style.cursor = 'grab';
-      }
-
-      document.addEventListener('touchmove', onTouchMove);
-      document.addEventListener('touchend', onTouchEnd);
-    });
   }
 
-  makeDraggable(document.getElementById('left-img'));
-  makeDraggable(document.getElementById('right-img'));
+  makeDraggable(document.getElementById('left-img'), 'floatSide 4s ease-in-out infinite');
+  makeDraggable(document.getElementById('right-img'), 'floatSide 5s ease-in-out infinite');
 
   // ===== ADJUST SIDE IMAGES FOR MOBILE =====
   function adjustSideImagesForMobile() {
@@ -495,10 +420,9 @@ for (let i = 0; i < 16; i++) {
   window.addEventListener('resize', adjustSideImagesForMobile);
 </script>
 
-
-
 </body>
 </html>
+
 
 
 
