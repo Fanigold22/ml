@@ -345,15 +345,37 @@ function makeDraggable(el) {
 
     document.addEventListener('mousemove', moveAt);
 
-    document.onmouseup = function() {
+ function makeDraggable(el) {
+  let shiftX, shiftY;
+
+  el.onmousedown = function(e) {
+    el.style.animation = 'none';
+    el.style.cursor = 'grabbing';
+
+    shiftX = e.clientX - el.getBoundingClientRect().left;
+    shiftY = e.clientY - el.getBoundingClientRect().top;
+
+    function moveAt(e) {
+      el.style.left = e.clientX - shiftX + 'px';
+      el.style.top = e.clientY - shiftY + 'px';
+    }
+
+    function onMouseUp() {
       document.removeEventListener('mousemove', moveAt);
-      document.onmouseup = null;
+      document.removeEventListener('mouseup', onMouseUp);
       el.style.cursor = 'grab';
       // Resume floating after release
       if(el.id==='left-img') el.style.animation = 'floatSide 4s ease-in-out infinite';
       if(el.id==='right-img') el.style.animation = 'floatSide 5s ease-in-out infinite';
-    };
+    }
+
+    document.addEventListener('mousemove', moveAt);
+    document.addEventListener('mouseup', onMouseUp);
   };
+
+  el.ondragstart = () => false;
+}
+
 
   el.ondragstart = () => false;
 }
@@ -379,11 +401,37 @@ function adjustSideImagesForMobile() {
 // Run on load and resize
 adjustSideImagesForMobile();
 window.addEventListener('resize', adjustSideImagesForMobile);
+  el.addEventListener('touchstart', function(e) {
+  e.preventDefault(); // prevent scrolling
+  const touch = e.touches[0];
+  let shiftX = touch.clientX - el.getBoundingClientRect().left;
+  let shiftY = touch.clientY - el.getBoundingClientRect().top;
+
+  function moveAt(touch) {
+    el.style.left = touch.clientX - shiftX + 'px';
+    el.style.top = touch.clientY - shiftY + 'px';
+  }
+
+  function onTouchMove(e) {
+    moveAt(e.touches[0]);
+  }
+
+  function onTouchEnd() {
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+    el.style.cursor = 'grab';
+  }
+
+  document.addEventListener('touchmove', onTouchMove);
+  document.addEventListener('touchend', onTouchEnd);
+});
+
 
   </script>
 
 </body>
 </html>
+
 
 
 
