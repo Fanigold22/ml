@@ -15,8 +15,8 @@
     }
     body, html {
       height: 100%;
-      background: #0a0a0a; /* pure black */
-      color: #ff3333; /* bright red */
+      background: #0a0a0a;
+      color: #ff3333;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow-y: auto;
       max-height: 100vh;
@@ -35,10 +35,9 @@
       z-index: 0;
     }
 
-    /* Heart style */
     .heart {
       position: absolute;
-      color: #8b0000; /* dark red */
+      color: #8b0000;
       font-size: 20px;
       user-select: none;
       animation-name: floatUpDown;
@@ -48,7 +47,7 @@
     }
 
     @keyframes floatUpDown {
-      0%, 100% { transform: translateY(0); }
+      0%,100% { transform: translateY(0); }
       50% { transform: translateY(-28px); }
     }
 
@@ -65,141 +64,113 @@
       padding: 0 20px;
     }
 
-    h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 4rem;
-      text-shadow: 0 0 20px #ff1a1a;
-      margin-bottom: 10px;
-    }
-    h2 {
-      font-weight: 400;
-      font-size: 1.8rem;
-      margin-bottom: 25px;
-      color: #cc0000;
-      text-shadow: 0 0 15px #cc0000cc;
-    }
-    p {
-      font-size: 1.2rem;
-      max-width: 450px;
-      line-height: 1.5;
+    h1 { font-family: 'Pacifico', cursive; font-size: 4rem; text-shadow: 0 0 20px #ff1a1a; margin-bottom: 10px; }
+    h2 { font-weight: 400; font-size: 1.8rem; margin-bottom: 25px; color: #cc0000; text-shadow: 0 0 15px #cc0000cc; }
+    p { font-size: 1.2rem; max-width: 450px; line-height: 1.5; color: #ff6666; margin-bottom: 40px; }
+    #timer { font-family: monospace; font-size: 1.5rem; color: #ff4d4d; text-shadow: 0 0 10px #cc0000aa; margin-bottom: 50px; letter-spacing: 2px; }
+
+    #play-music { background: #8b0000; border: none; padding: 14px 28px; border-radius: 50px; font-size: 1.2rem; color: white; cursor: pointer; box-shadow: 0 0 20px #b22222cc; transition: background 0.3s; user-select: none; }
+    #play-music:hover { background: #550000; box-shadow: 0 0 35px #880000cc; }
+
+    #songs-link { margin-top: 30px; font-size: 1rem; color: #ff6666; cursor: pointer; text-decoration: underline; user-select: none; }
+    #songs-link:hover { color: #ff1a1a; }
+
+#left-img {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  width: 190px; /* smaller */
+  border-radius: 12px;
+  cursor: grab;
+  z-index: 10001;
+  animation: floatSide 4s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+#right-img {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  width: 300px; /* bigger */
+  border-radius: 12px;
+  cursor: grab;
+  z-index: 10001;
+  animation: floatSide 5s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+/* Floating animation */
+@keyframes floatSide {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(5px, -5px); }
+  50%  { transform: translate(0px, -10px); }
+  75%  { transform: translate(-5px, -5px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+    #fun-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
       color: #ff6666;
-      margin-bottom: 40px;
-    }
-
-    /* Timer text */
-    #timer {
-      font-family: monospace;
-      font-size: 1.5rem;
-      color: #ff4d4d;
-      text-shadow: 0 0 10px #cc0000aa;
-      margin-bottom: 50px;
-      letter-spacing: 2px;
-    }
-
-    /* Play music button */
-    #play-music {
-      background: #8b0000;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 50px;
       font-size: 1.2rem;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 20px #b22222cc;
-      transition: background 0.3s;
-      user-select: none;
-    }
-    #play-music:hover {
-      background: #550000;
-      box-shadow: 0 0 35px #880000cc;
+      text-shadow: 0 0 10px #ff0000;
+      display: none;
+      z-index: 10002;
     }
 
-    /* Navigation link to songs page */
-    #songs-link {
-      margin-top: 30px;
-      font-size: 1rem;
-      color: #ff6666;
-      cursor: pointer;
-      text-decoration: underline;
-      user-select: none;
+    /* Puzzle container */
+    #puzzle-container {
+      width: 480px;
+      height: 320px;
+      border: 3px solid #ff3333;
+      margin: 20px auto;
+      position: relative;
+      background: #1a0000;
+      z-index: 10;
     }
-    #songs-link:hover {
-      color: #ff1a1a;
+    .puzzle-piece {
+      width: 120px;
+      height: 80px;
+      position: absolute;
+      cursor: grab;
+      border-radius: 6px;
+      transition: transform 0.2s;
+    }
+    .puzzle-piece.correct {
+      cursor: default;
+      box-shadow: 0 0 15px #ff4444;
     }
 
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    /* Password overlay */
+    #passwordOverlay { position: fixed; top:0; left:0; right:0; bottom:0; background: #0a0a0a; color:#ff3333; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 9999;}
+    #passwordInput { padding: 10px 15px; font-size: 1.2rem; border-radius: 8px; border: 2px solid #ff3333; background: #1a0000; color: #ff6666; margin-top:10px;}
+    #submitPassword { margin-top: 15px; padding: 10px 25px; font-size:1.2rem; border-radius:30px; border:none; background:#8b0000; color:white; cursor:pointer;}
+    #passwordError { margin-top:10px; color:#ff4444; font-size:1rem; display:none;}
   </style>
 </head>
 <body>
-  
-<style>
-  #passwordOverlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: #0a0a0a;
-    color: #ff3333;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  #passwordInput {
-    padding: 10px 15px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    border: 2px solid #ff3333;
-    background: #1a0000;
-    color: #ff6666;
-    margin-top: 10px;
-  }
-  #submitPassword {
-    margin-top: 15px;
-    padding: 10px 25px;
-    font-size: 1.2rem;
-    border-radius: 30px;
-    border: none;
-    background: #8b0000;
-    color: white;
-    cursor: pointer;
-  }
-  #passwordError {
-    margin-top: 10px;
-    color: #ff4444;
-    font-size: 1rem;
-    display: none;
-  }
-</style>
 
-<div id="passwordOverlay">
-  <label for="passwordInput">Enter Password to Access</label>
-  <input type="password" id="passwordInput" autocomplete="off" />
-  <button id="submitPassword">Enter</button>
-  <div id="passwordError">Incorrect password, try again.</div>
-</div>
+  <div id="passwordOverlay">
+    <label for="passwordInput">Enter Password to Access</label>
+    <input type="password" id="passwordInput" autocomplete="off" />
+    <button id="submitPassword">Enter</button>
+    <div id="passwordError">Incorrect password, try again.</div>
+  </div>
 
-<script>
-  const passwordOverlay = document.getElementById('passwordOverlay');
-  const passwordInput = document.getElementById('passwordInput');
-  const submitBtn = document.getElementById('submitPassword');
-  const errorMsg = document.getElementById('passwordError');
-  const correctPassword = '240425';
-
-  function checkPassword() {
-    if(passwordInput.value === correctPassword) {
-      passwordOverlay.style.display = 'none';
-    } else {
-      errorMsg.style.display = 'block';
-      passwordInput.value = '';
-    }
-  }
-
-  submitBtn.addEventListener('click', checkPassword);
-  passwordInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') checkPassword();
-  });
-</script>
-
-<div id="hearts-container"></div>
+  <div id="hearts-container"></div>
 
   <div id="content">
     <h1>Time Together:</h1>
@@ -209,88 +180,185 @@
     <button id="play-music">press me. now.</button>
     <div id="songs-link">songs that remind me of you</div>
     <a href="games.html" target="_blank" style="color: #a00000; text-decoration: underline; font-size: 18px; cursor: pointer;">
-    click here for something fun ♥
-</a>
+      click here for something fun ♥
+    </a>
+  </div>
 
-    </div>
+  <!-- Side images -->
+  <img id="left-img" class="float-left" src="images/photo1.jpg" alt="Left Pic" onclick="leftAction()" />
+  <img id="right-img" class="float-right" src="images/photo2.jpg" alt="Right Pic" onclick="rightAction()" />
+  <div id="fun-message">🎉 Surprise!</div>
 
+  <!-- Puzzle -->
+  <div id="puzzle-container"></div>
+
+  <!-- Audio -->
   <audio id="bg-music" loop>
-    <source src="audio/I will.mp3" type="audio/mp3" />
+    <source src="audio/I will.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
+  <audio id="funSound" src="sounds/click.mp3"></audio>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <script>
+    // Password overlay
+    const passwordOverlay = document.getElementById('passwordOverlay');
+    const passwordInput = document.getElementById('passwordInput');
+    const submitBtn = document.getElementById('submitPassword');
+    const errorMsg = document.getElementById('passwordError');
+    const correctPassword = '240425';
 
-    // Floating hearts logic
-    const heartsContainer = document.getElementById('hearts-container');
-    const numHearts = 60;
-
-    function randomRange(min, max) {
-      return Math.random() * (max - min) + min;
+    function checkPassword() {
+      if(passwordInput.value === correctPassword){
+        passwordOverlay.style.display='none';
+      } else {
+        errorMsg.style.display='block';
+        passwordInput.value='';
+      }
     }
+    submitBtn.addEventListener('click', checkPassword);
+    passwordInput.addEventListener('keydown', e=>{ if(e.key==='Enter') checkPassword(); });
 
-    for (let i = 0; i < numHearts; i++) {
+    // Floating hearts
+    const heartsContainer = document.getElementById('hearts-container');
+    for(let i=0;i<60;i++){
       const heart = document.createElement('div');
       heart.classList.add('heart');
-      heart.textContent = '❤';
-      heart.style.left = randomRange(0, 100) + 'vw';
-      heart.style.top = randomRange(0, 100) + 'vh';
-      heart.style.fontSize = randomRange(15, 30) + 'px';
-      heart.style.animationDuration = randomRange(4, 8) + 's';
-      heart.style.animationDelay = randomRange(0, 8) + 's';
+      heart.textContent='❤';
+      heart.style.left=Math.random()*100+'vw';
+      heart.style.top=Math.random()*100+'vh';
+      heart.style.fontSize=Math.random()*15+15+'px';
+      heart.style.animationDuration=Math.random()*4+4+'s';
+      heart.style.animationDelay=Math.random()*8+'s';
       heartsContainer.appendChild(heart);
     }
 
-    // Timer logic for 5 months from March 24, 2025
+    // Timer
     const timer = document.getElementById('timer');
     const startDate = new Date('2025-03-24T00:00:00');
-
-    function updateTimer() {
+    function updateTimer(){
       const now = new Date();
       let diff = now - startDate;
-
-      const months = 5; // fixed 5 months
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      diff -= days * (1000 * 60 * 60 * 24);
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      diff -= hours * (1000 * 60 * 60);
-
-      const minutes = Math.floor(diff / (1000 * 60));
-      diff -= minutes * (1000 * 60);
-
+      const days = Math.floor(diff / (1000*60*60*24)); diff -= days*1000*60*60*24;
+      const hours = Math.floor(diff / (1000*60*60)); diff -= hours*1000*60*60;
+      const minutes = Math.floor(diff / (1000*60)); diff -= minutes*1000*60;
       const seconds = Math.floor(diff / 1000);
-
-      timer.textContent = `${days} days, ${hours}h ${minutes}m ${seconds}s`;
+      timer.textContent=`${days} days, ${hours}h ${minutes}m ${seconds}s`;
     }
-    setInterval(updateTimer, 1000);
-    updateTimer();
+    setInterval(updateTimer,1000); updateTimer();
 
-    // Music play button
-    const playBtn = document.getElementById('play-music');
-    const bgMusic = document.getElementById('bg-music');
-
-    let musicPlaying = false;
-
-    playBtn.addEventListener('click', () => {
-      if (!musicPlaying) {
-        bgMusic.play();
-        musicPlaying = true;
-        playBtn.textContent = '❤️ playing...';
-      } else {
-        bgMusic.pause();
-        musicPlaying = false;
-        playBtn.textContent = 'press me. now.';
-      }
+    // Music button
+    const playBtn=document.getElementById('play-music');
+    const bgMusic=document.getElementById('bg-music');
+    let musicPlaying=false;
+    playBtn.addEventListener('click', ()=>{
+      if(!musicPlaying){ bgMusic.play(); musicPlaying=true; playBtn.textContent='❤️ playing...'; }
+      else{ bgMusic.pause(); musicPlaying=false; playBtn.textContent='press me. now.'; }
     });
 
-    // Songs page redirect
-    document.getElementById('songs-link').addEventListener('click', () => {
-      window.location.href = 'hearts.html';
-    });
+    // Songs link
+    document.getElementById('songs-link').addEventListener('click',()=>{window.location.href='hearts.html';});
+
+    // Side images actions
+    function leftAction(){ document.getElementById("funSound").play(); const msg=document.getElementById('fun-message'); msg.innerText="🎵 You clicked the left picture!"; msg.style.display='block'; setTimeout(()=>{msg.style.display='none';},2000);}
+    function rightAction(){ confetti({particleCount:150, spread:80, origin:{y:0.6}}); setTimeout(()=>{window.location.href="https://example.com";},2000); }
+
+    // 16-piece puzzle
+    const puzzleContainer=document.getElementById('puzzle-container');
+    const rows=4, cols=4, pieceWidth=120, pieceHeight=80;
+    let pieces=[];
+    let placedCount=0;
+
+    for(let i=0;i<16;i++){
+      const piece=document.createElement('img');
+      piece.classList.add('puzzle-piece');
+      piece.src=`images/puzzle/piece_${i}.png`;
+      piece.dataset.index=i;
+      piece.style.left=Math.random()*(puzzleContainer.clientWidth-pieceWidth)+'px';
+      piece.style.top=Math.random()*(puzzleContainer.clientHeight-pieceHeight)+'px';
+      puzzleContainer.appendChild(piece);
+      pieces.push(piece);
+
+      piece.onmousedown=function(e){
+        if(piece.classList.contains('correct')) return;
+        let shiftX=e.clientX-piece.getBoundingClientRect().left;
+        let shiftY=e.clientY-piece.getBoundingClientRect().top;
+        piece.style.zIndex=10003;
+
+        function moveAt(e){
+          piece.style.left=e.clientX-shiftX-puzzleContainer.getBoundingClientRect().left+'px';
+          piece.style.top=e.clientY-shiftY-puzzleContainer.getBoundingClientRect().top+'px';
+        }
+
+        function onMouseMove(e){ moveAt(e); }
+        document.addEventListener('mousemove', onMouseMove);
+
+        piece.onmouseup=function(){
+          document.removeEventListener('mousemove', onMouseMove);
+          piece.onmouseup=null;
+
+          const correctRow=Math.floor(piece.dataset.index/cols);
+          const correctCol=piece.dataset.index%cols;
+          const correctX=correctCol*pieceWidth;
+          const correctY=correctRow*pieceHeight;
+
+          if(Math.abs(parseInt(piece.style.left)-correctX)<15 && Math.abs(parseInt(piece.style.top)-correctY)<15){
+            piece.style.left=correctX+'px';
+            piece.style.top=correctY+'px';
+            piece.classList.add('correct');
+            piece.style.zIndex=10002;
+            placedCount++;
+            if(placedCount===16){
+              confetti({particleCount:300, spread:160, origin:{y:0.5}});
+              alert("🎉 Puzzle completed!");
+            }
+          }
+        };
+      };
+      piece.ondragstart = ()=>false;
+    }
+function makeDraggable(el) {
+  let shiftX, shiftY;
+
+  el.onmousedown = function(e) {
+    // Stop floating while dragging
+    el.style.animation = 'none';
+    el.style.cursor = 'grabbing';
+
+    shiftX = e.clientX - el.getBoundingClientRect().left;
+    shiftY = e.clientY - el.getBoundingClientRect().top;
+
+    function moveAt(e) {
+      el.style.left = e.clientX - shiftX + 'px';
+      el.style.top = e.clientY - shiftY + 'px';
+    }
+
+    document.addEventListener('mousemove', moveAt);
+
+    document.onmouseup = function() {
+      document.removeEventListener('mousemove', moveAt);
+      document.onmouseup = null;
+      el.style.cursor = 'grab';
+      // Resume floating after release
+      if(el.id==='left-img') el.style.animation = 'floatSide 4s ease-in-out infinite';
+      if(el.id==='right-img') el.style.animation = 'floatSide 5s ease-in-out infinite';
+    };
+  };
+
+  el.ondragstart = () => false;
+}
+
+makeDraggable(document.getElementById('left-img'));
+makeDraggable(document.getElementById('right-img'));
+
   </script>
+
 </body>
 </html>
+
 
 
 
