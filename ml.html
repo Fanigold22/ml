@@ -353,16 +353,16 @@ function makeDraggable(el) {
 
 makeDraggable(document.getElementById('left-img'));
 makeDraggable(document.getElementById('right-img'));
-    function adjustSideImagesForMobile() {
+function adjustSideImagesForMobile() {
   const left = document.getElementById('left-img');
   const right = document.getElementById('right-img');
 
   if (window.innerWidth < 768) { // mobile
-    left.style.width = '60px';
-    right.style.width = '90px';
-  } else { // desktop
     left.style.width = '80px';
     right.style.width = '120px';
+  } else { // desktop
+    left.style.width = '120px';
+    right.style.width = '180px';
   }
 
   left.style.height = 'auto';
@@ -377,6 +377,7 @@ window.addEventListener('resize', adjustSideImagesForMobile);
 
 </body>
 </html>
+
 
 
 
