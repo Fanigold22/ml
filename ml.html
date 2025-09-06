@@ -159,6 +159,12 @@
     #passwordInput { padding: 10px 15px; font-size: 1.2rem; border-radius: 8px; border: 2px solid #ff3333; background: #1a0000; color: #ff6666; margin-top:10px;}
     #submitPassword { margin-top: 15px; padding: 10px 25px; font-size:1.2rem; border-radius:30px; border:none; background:#8b0000; color:white; cursor:pointer;}
     #passwordError { margin-top:10px; color:#ff4444; font-size:1rem; display:none;}
+     #passwordHint {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #ff6666;
+      font-style: italic;
+
   </style>
 </head>
 <body>
@@ -169,6 +175,7 @@
     <button id="submitPassword">Enter</button>
     <div id="passwordError">Incorrect password, try again.</div>
   </div>
+  <div id="passwordHint">hint: our first kiss</div>
 
   <div id="hearts-container"></div>
 
@@ -377,6 +384,7 @@ window.addEventListener('resize', adjustSideImagesForMobile);
 
 </body>
 </html>
+
 
 
 
