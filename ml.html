@@ -208,229 +208,230 @@
 
   <canvas id="confetti-canvas"></canvas>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script>
+  // ===== PASSWORD OVERLAY =====
+  const passwordOverlay = document.getElementById('passwordOverlay');
+  const passwordInput = document.getElementById('passwordInput');
+  const submitBtn = document.getElementById('submitPassword');
+  const errorMsg = document.getElementById('passwordError');
+  const correctPassword = '240425';
 
-  <script>
-    // Password overlay
-    const passwordOverlay = document.getElementById('passwordOverlay');
-    const passwordInput = document.getElementById('passwordInput');
-    const submitBtn = document.getElementById('submitPassword');
-    const errorMsg = document.getElementById('passwordError');
-    const correctPassword = '240425';
+  function checkPassword() {
+    if (passwordInput.value === correctPassword) {
+      passwordOverlay.style.display = 'none';
+    } else {
+      errorMsg.style.display = 'block';
+      passwordInput.value = '';
+    }
+  }
 
-    function checkPassword() {
-      if(passwordInput.value === correctPassword){
-        passwordOverlay.style.display='none';
-      } else {
-        errorMsg.style.display='block';
-        passwordInput.value='';
+  submitBtn.addEventListener('click', checkPassword);
+  passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+  // ===== FLOATING HEARTS =====
+  const heartsContainer = document.getElementById('hearts-container');
+  for (let i = 0; i < 60; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.textContent = '❤';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.top = Math.random() * 100 + 'vh';
+    heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+    heart.style.animationDuration = Math.random() * 4 + 4 + 's';
+    heart.style.animationDelay = Math.random() * 8 + 's';
+    heartsContainer.appendChild(heart);
+  }
+
+  // ===== TIMER =====
+  const timer = document.getElementById('timer');
+  const startDate = new Date('2025-03-24T00:00:00');
+  function updateTimer() {
+    const now = new Date();
+    let diff = now - startDate;
+    const days = Math.floor(diff / (1000*60*60*24)); diff -= days*1000*60*60*24;
+    const hours = Math.floor(diff / (1000*60*60)); diff -= hours*1000*60*60;
+    const minutes = Math.floor(diff / (1000*60)); diff -= minutes*1000*60;
+    const seconds = Math.floor(diff / 1000);
+    timer.textContent = `${days} days, ${hours}h ${minutes}m ${seconds}s`;
+  }
+  setInterval(updateTimer, 1000);
+  updateTimer();
+
+  // ===== MUSIC BUTTON =====
+  const playBtn = document.getElementById('play-music');
+  const bgMusic = document.getElementById('bg-music');
+  let musicPlaying = false;
+  playBtn.addEventListener('click', () => {
+    if (!musicPlaying) { 
+      bgMusic.play(); 
+      musicPlaying = true; 
+      playBtn.textContent = '❤️ playing...'; 
+    } else { 
+      bgMusic.pause(); 
+      musicPlaying = false; 
+      playBtn.textContent = 'press me. now.'; 
+    }
+  });
+
+  // ===== SONGS LINK =====
+  document.getElementById('songs-link').addEventListener('click', () => {
+    window.location.href = 'hearts.html';
+  });
+
+  // ===== SIDE IMAGES ACTIONS =====
+  function leftAction() {
+    document.getElementById("funSound").play();
+    const msg = document.getElementById('fun-message');
+    msg.innerText = "Click the left pic...";
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 2000);
+  }
+
+  function rightAction() {
+    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+    setTimeout(() => { window.open("http://www.staggeringbeauty.com/", "_blank"); }, 2000);
+  }
+
+  // ===== 16-PIECE PUZZLE =====
+  const puzzleContainer = document.getElementById('puzzle-container');
+  const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
+  let pieces = [], placedCount = 0;
+
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement('img');
+    piece.classList.add('puzzle-piece');
+    piece.src = `images/puzzle/piece_${i}.png`;
+    piece.dataset.index = i;
+    piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
+    piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
+    puzzleContainer.appendChild(piece);
+    pieces.push(piece);
+
+    piece.onmousedown = function(e) {
+      if (piece.classList.contains('correct')) return;
+      let shiftX = e.clientX - piece.getBoundingClientRect().left;
+      let shiftY = e.clientY - piece.getBoundingClientRect().top;
+      piece.style.zIndex = 10003;
+
+      function moveAt(e) {
+        piece.style.left = e.clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
+        piece.style.top = e.clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
       }
-    }
-    submitBtn.addEventListener('click', checkPassword);
-    passwordInput.addEventListener('keydown', e=>{ if(e.key==='Enter') checkPassword(); });
 
-    // Floating hearts
-    const heartsContainer = document.getElementById('hearts-container');
-    for(let i=0;i<60;i++){
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.textContent='❤';
-      heart.style.left=Math.random()*100+'vw';
-      heart.style.top=Math.random()*100+'vh';
-      heart.style.fontSize=Math.random()*15+15+'px';
-      heart.style.animationDuration=Math.random()*4+4+'s';
-      heart.style.animationDelay=Math.random()*8+'s';
-      heartsContainer.appendChild(heart);
-    }
+      function onMouseMove(e) { moveAt(e); }
+      function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        piece.onmouseup = null;
 
-    // Timer
-    const timer = document.getElementById('timer');
-    const startDate = new Date('2025-03-24T00:00:00');
-    function updateTimer(){
-      const now = new Date();
-      let diff = now - startDate;
-      const days = Math.floor(diff / (1000*60*60*24)); diff -= days*1000*60*60*24;
-      const hours = Math.floor(diff / (1000*60*60)); diff -= hours*1000*60*60;
-      const minutes = Math.floor(diff / (1000*60)); diff -= minutes*1000*60;
-      const seconds = Math.floor(diff / 1000);
-      timer.textContent=`${days} days, ${hours}h ${minutes}m ${seconds}s`;
-    }
-    setInterval(updateTimer,1000); updateTimer();
+        const correctRow = Math.floor(piece.dataset.index / cols);
+        const correctCol = piece.dataset.index % cols;
+        const correctX = correctCol * pieceWidth;
+        const correctY = correctRow * pieceHeight;
 
-    // Music button
-    const playBtn=document.getElementById('play-music');
-    const bgMusic=document.getElementById('bg-music');
-    let musicPlaying=false;
-    playBtn.addEventListener('click', ()=>{
-      if(!musicPlaying){ bgMusic.play(); musicPlaying=true; playBtn.textContent='❤️ playing...'; }
-      else{ bgMusic.pause(); musicPlaying=false; playBtn.textContent='press me. now.'; }
-    });
-
-    // Songs link
-    document.getElementById('songs-link').addEventListener('click',()=>{window.location.href='hearts.html';});
-
-    // Side images actions
-    function leftAction(){ document.getElementById("funSound").play(); const msg=document.getElementById('fun-message'); msg.innerText="Click the left pic..."; msg.style.display='block'; setTimeout(()=>{msg.style.display='none';},2000);}
-    function rightAction(){ confetti({particleCount:150, spread:80, origin:{y:0.6}}); setTimeout(()=>{window.open("http://www.staggeringbeauty.com/", "_blank");},2000); }
-
-    // 16-piece puzzle
-    const puzzleContainer=document.getElementById('puzzle-container');
-    const rows=4, cols=4, pieceWidth=150, pieceHeight=100;
-    let pieces=[];
-    let placedCount=0;
-
-    for(let i=0;i<16;i++){
-      const piece=document.createElement('img');
-      piece.classList.add('puzzle-piece');
-      piece.src=`images/puzzle/piece_${i}.png`;
-      piece.dataset.index=i;
-      piece.style.left=Math.random()*(puzzleContainer.clientWidth-pieceWidth)+'px';
-      piece.style.top=Math.random()*(puzzleContainer.clientHeight-pieceHeight)+'px';
-      puzzleContainer.appendChild(piece);
-      pieces.push(piece);
-
-      piece.onmousedown=function(e){
-        if(piece.classList.contains('correct')) return;
-        let shiftX=e.clientX-piece.getBoundingClientRect().left;
-        let shiftY=e.clientY-piece.getBoundingClientRect().top;
-        piece.style.zIndex=10003;
-
-        function moveAt(e){
-          piece.style.left=e.clientX-shiftX-puzzleContainer.getBoundingClientRect().left+'px';
-          piece.style.top=e.clientY-shiftY-puzzleContainer.getBoundingClientRect().top+'px';
-        }
-
-        function onMouseMove(e){ moveAt(e); }
-        document.addEventListener('mousemove', onMouseMove);
-
-        piece.onmouseup=function(){
-          document.removeEventListener('mousemove', onMouseMove);
-          piece.onmouseup=null;
-
-          const correctRow=Math.floor(piece.dataset.index/cols);
-          const correctCol=piece.dataset.index%cols;
-          const correctX=correctCol*pieceWidth;
-          const correctY=correctRow*pieceHeight;
-
-          if(Math.abs(parseInt(piece.style.left)-correctX)<15 && Math.abs(parseInt(piece.style.top)-correctY)<15){
-            piece.style.left=correctX+'px';
-            piece.style.top=correctY+'px';
-            piece.classList.add('correct');
-            piece.style.zIndex=10002;
-            placedCount++;
-            if(placedCount===16){
-              confetti({particleCount:300, spread:160, origin:{y:0.5}});
-              alert("🎉 Puzzle completed!");
-            }
+        if (Math.abs(parseInt(piece.style.left) - correctX) < 15 &&
+            Math.abs(parseInt(piece.style.top) - correctY) < 15) {
+          piece.style.left = correctX + 'px';
+          piece.style.top = correctY + 'px';
+          piece.classList.add('correct');
+          piece.style.zIndex = 10002;
+          placedCount++;
+          if (placedCount === 16) {
+            confetti({ particleCount: 300, spread: 160, origin: { y: 0.5 } });
+            alert("🎉 Puzzle completed!");
           }
-        };
-      };
-      piece.ondragstart = ()=>false;
-    }
-function makeDraggable(el) {
-  let shiftX, shiftY;
+        }
+      }
 
-  el.onmousedown = function(e) {
-    // Stop floating while dragging
-    el.style.animation = 'none';
-    el.style.cursor = 'grabbing';
-
-    shiftX = e.clientX - el.getBoundingClientRect().left;
-    shiftY = e.clientY - el.getBoundingClientRect().top;
-
-    function moveAt(e) {
-      el.style.left = e.clientX - shiftX + 'px';
-      el.style.top = e.clientY - shiftY + 'px';
-    }
-
-    document.addEventListener('mousemove', moveAt);
-
- function makeDraggable(el) {
-  let shiftX, shiftY;
-
-  el.onmousedown = function(e) {
-    el.style.animation = 'none';
-    el.style.cursor = 'grabbing';
-
-    shiftX = e.clientX - el.getBoundingClientRect().left;
-    shiftY = e.clientY - el.getBoundingClientRect().top;
-
-    function moveAt(e) {
-      el.style.left = e.clientX - shiftX + 'px';
-      el.style.top = e.clientY - shiftY + 'px';
-    }
-
-    function onMouseUp() {
-      document.removeEventListener('mousemove', moveAt);
-      document.removeEventListener('mouseup', onMouseUp);
-      el.style.cursor = 'grab';
-      // Resume floating after release
-      if(el.id==='left-img') el.style.animation = 'floatSide 4s ease-in-out infinite';
-      if(el.id==='right-img') el.style.animation = 'floatSide 5s ease-in-out infinite';
-    }
-
-    document.addEventListener('mousemove', moveAt);
-    document.addEventListener('mouseup', onMouseUp);
-  };
-
-  el.ondragstart = () => false;
-}
-
-
-  el.ondragstart = () => false;
-}
-
-makeDraggable(document.getElementById('left-img'));
-makeDraggable(document.getElementById('right-img'));
-function adjustSideImagesForMobile() {
-  const left = document.getElementById('left-img');
-  const right = document.getElementById('right-img');
-
-  if (window.innerWidth < 768) { // mobile
-    left.style.width = '80px';
-    right.style.width = '120px';
-  } else { // desktop
-    left.style.width = '180px';
-    right.style.width = '310px';
+      document.addEventListener('mousemove', onMouseMove);
+      piece.onmouseup = onMouseUp;
+    };
+    piece.ondragstart = () => false;
   }
 
-  left.style.height = 'auto';
-  right.style.height = 'auto';
-}
+  // ===== MAKE ELEMENTS DRAGGABLE (IMAGES) =====
+  function makeDraggable(el) {
+    let shiftX, shiftY;
 
-// Run on load and resize
-adjustSideImagesForMobile();
-window.addEventListener('resize', adjustSideImagesForMobile);
-  el.addEventListener('touchstart', function(e) {
-  e.preventDefault(); // prevent scrolling
-  const touch = e.touches[0];
-  let shiftX = touch.clientX - el.getBoundingClientRect().left;
-  let shiftY = touch.clientY - el.getBoundingClientRect().top;
+    el.onmousedown = function(e) {
+      el.style.animation = 'none';
+      el.style.cursor = 'grabbing';
 
-  function moveAt(touch) {
-    el.style.left = touch.clientX - shiftX + 'px';
-    el.style.top = touch.clientY - shiftY + 'px';
+      shiftX = e.clientX - el.getBoundingClientRect().left;
+      shiftY = e.clientY - el.getBoundingClientRect().top;
+
+      function moveAt(e) {
+        el.style.left = e.clientX - shiftX + 'px';
+        el.style.top = e.clientY - shiftY + 'px';
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mousemove', moveAt);
+        document.removeEventListener('mouseup', onMouseUp);
+        el.style.cursor = 'grab';
+        if (el.id === 'left-img') el.style.animation = 'floatSide 4s ease-in-out infinite';
+        if (el.id === 'right-img') el.style.animation = 'floatSide 5s ease-in-out infinite';
+      }
+
+      document.addEventListener('mousemove', moveAt);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+
+    el.ondragstart = () => false;
+
+    // TOUCH SUPPORT
+    el.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      let shiftX = touch.clientX - el.getBoundingClientRect().left;
+      let shiftY = touch.clientY - el.getBoundingClientRect().top;
+
+      function moveAt(touch) {
+        el.style.left = touch.clientX - shiftX + 'px';
+        el.style.top = touch.clientY - shiftY + 'px';
+      }
+
+      function onTouchMove(e) { moveAt(e.touches[0]); }
+      function onTouchEnd() {
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        el.style.cursor = 'grab';
+      }
+
+      document.addEventListener('touchmove', onTouchMove);
+      document.addEventListener('touchend', onTouchEnd);
+    });
   }
 
-  function onTouchMove(e) {
-    moveAt(e.touches[0]);
+  makeDraggable(document.getElementById('left-img'));
+  makeDraggable(document.getElementById('right-img'));
+
+  // ===== ADJUST SIDE IMAGES FOR MOBILE =====
+  function adjustSideImagesForMobile() {
+    const left = document.getElementById('left-img');
+    const right = document.getElementById('right-img');
+
+    if (window.innerWidth < 768) {
+      left.style.width = '80px';
+      right.style.width = '120px';
+    } else {
+      left.style.width = '180px';
+      right.style.width = '310px';
+    }
+
+    left.style.height = 'auto';
+    right.style.height = 'auto';
   }
 
-  function onTouchEnd() {
-    document.removeEventListener('touchmove', onTouchMove);
-    document.removeEventListener('touchend', onTouchEnd);
-    el.style.cursor = 'grab';
-  }
-
-  document.addEventListener('touchmove', onTouchMove);
-  document.addEventListener('touchend', onTouchEnd);
-});
+  adjustSideImagesForMobile();
+  window.addEventListener('resize', adjustSideImagesForMobile);
+</script>
 
 
-  </script>
 
 </body>
 </html>
+
 
 
 
