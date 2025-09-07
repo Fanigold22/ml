@@ -330,24 +330,48 @@ function checkPiecePosition(el) {
       confetti({particleCount:300, spread:160, origin:{y:0.5}});
       setTimeout(() => alert("🎉 Puzzle completed!"), 100);
 
-      const secretBtn = document.createElement('button');
-      secretBtn.textContent = "Open Your Letter 💌";
-      Object.assign(secretBtn.style, {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        padding: '15px 30px',
-        background: '#ff4d4d',
-        color: 'white',
-        fontSize: '1.2rem',
-        border: 'none',
-        borderRadius: '10px',
-        cursor: 'pointer',
-        zIndex: '10005'
-      });
-      secretBtn.onclick = () => window.open('love-letter.html', '_blank');
-      document.body.appendChild(secretBtn);
+     // Create secret button with close
+const secretBtnContainer = document.createElement('div');
+secretBtnContainer.style.position = 'fixed';
+secretBtnContainer.style.top = '50%';
+secretBtnContainer.style.left = '50%';
+secretBtnContainer.style.transform = 'translate(-50%, -50%)';
+secretBtnContainer.style.zIndex = 10005;
+secretBtnContainer.style.display = 'flex';
+secretBtnContainer.style.alignItems = 'center';
+secretBtnContainer.style.gap = '10px';
+
+const secretBtn = document.createElement('button');
+secretBtn.textContent = "Open Your Letter 💌";
+secretBtn.style.padding = '15px 30px';
+secretBtn.style.background = '#ff4d4d';
+secretBtn.style.color = 'white';
+secretBtn.style.fontSize = '1.2rem';
+secretBtn.style.border = 'none';
+secretBtn.style.borderRadius = '10px';
+secretBtn.style.cursor = 'pointer';
+
+// Open new tab on click
+secretBtn.onclick = () => {
+    window.open('love-letter.html', '_blank');
+};
+
+// Close button
+const closeBtn = document.createElement('button');
+closeBtn.textContent = '✖';
+closeBtn.style.padding = '5px 10px';
+closeBtn.style.background = '#550000';
+closeBtn.style.color = 'white';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '50%';
+closeBtn.style.cursor = 'pointer';
+closeBtn.onclick = () => secretBtnContainer.remove();
+
+// Append both buttons to container
+secretBtnContainer.appendChild(secretBtn);
+secretBtnContainer.appendChild(closeBtn);
+document.body.appendChild(secretBtnContainer);
+
     }
   }
 }
@@ -460,6 +484,7 @@ for (let i = 0; i < 16; i++) {
 
 </body>
 </html>
+
 
 
 
