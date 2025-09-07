@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Letter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffece6;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* Letter container */
+  .letter {
+    width: 300px;
+    height: 400px;
+    background: #fff8e1;
+    border: 2px solid #f4d1a1;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transform-origin: top center;
+    transform: scaleY(0);
+    animation: unfold 1s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes unfold {
+    to { transform: scaleY(1); }
+  }
+
+  /* Letter text */
+  .letter-text {
+    padding: 30px 20px;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.5rem;
+    color: #b23e3e;
+    line-height: 1.6;
+  }
+
+  /* Flower decoration */
+  .flower {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: url('https://i.imgur.com/ehFzvVw.png') no-repeat center/contain; /* replace with your flower PNG */
+    animation: floatFlower 6s ease-in-out infinite;
+    z-index: 1;
+  }
+
+  .flower:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+  .flower:nth-child(2) { top: 70%; left: 15%; animation-delay: 2s; }
+  .flower:nth-child(3) { top: 50%; left: 80%; animation-delay: 4s; }
+
+  @keyframes floatFlower {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+    100% { transform: translateY(0) rotate(-5deg); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Flowers -->
+  <div class="flower"></div>
+  <div class="flower"></div>
+  <div class="flower"></div>
+
+  <!-- Love Letter -->
+  <div class="letter">
+    <div class="letter-text">
+      My dearest, <br><br>
+      Every moment we share feels like a story written in stars.  
+      You light up my world in ways I never imagined.  
+      Thank you for being you, and for every laugh, every smile, and every heartbeat we share.<br><br>
+      Forever yours, <br>
+      ❤️
+    </div>
+  </div>
+
+</body>
+</html>
