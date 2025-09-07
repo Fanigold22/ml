@@ -206,7 +206,7 @@
 <div class="puzzle-intro">
   <img src="https://th.bing.com/th/id/R.2f3daa3f59c7223ef9e40a42ff040c99?rik=wBb8ozesAEZJ7w&pid=ImgRaw&r=0" 
        alt="Puzzle Intro" 
-       style="max-width:100%; height:auto; border-radius:10px;">
+       style="max-width:10%; height:auto; border-radius:10px;">
 </div>
 
   <!-- Puzzle -->
@@ -374,10 +374,28 @@
         if(placedCount === 16){
           confetti({particleCount:300, spread:160, origin:{y:0.5}});
           alert("🎉 Puzzle completed!");
-        }
-      }
-    }
+        // Create secret button
+  const secretBtn = document.createElement('button');
+  secretBtn.textContent = "Open Your Letter 💌";
+  secretBtn.style.position = 'fixed';
+  secretBtn.style.top = '50%';
+  secretBtn.style.left = '50%';
+  secretBtn.style.transform = 'translate(-50%, -50%)';
+  secretBtn.style.padding = '15px 30px';
+  secretBtn.style.background = '#ff4d4d';
+  secretBtn.style.color = 'white';
+  secretBtn.style.fontSize = '1.2rem';
+  secretBtn.style.border = 'none';
+  secretBtn.style.borderRadius = '10px';
+  secretBtn.style.cursor = 'pointer';
+  secretBtn.style.zIndex = 10005;
 
+  secretBtn.onclick = () => {
+    window.open('love-letter.html', '_blank'); // or show popup instead
+  };
+
+  document.body.appendChild(secretBtn);
+}
     makePieceDraggable(piece);
   }
 
@@ -439,6 +457,7 @@
 
 </body>
 </html>
+
 
 
 
