@@ -3,211 +3,381 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Love Letter</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<title>Envelope Letter</title>
 <style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: #0a0a0a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-    overflow: hidden;
-  }
+body {
+  background-color: #fff5e6;
+  font-family: 'Segoe UI', sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  /* Floating flowers */
-  .flower {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: url('https://i.imgur.com/9P0eK8C.png') no-repeat center/contain;
-    animation: floatFlower linear infinite;
-  }
+/* Envelope container */
+#envelope-container {
+  position: relative;
+  width: 300px;
+  margin-top: 100px;
+  cursor: pointer;
+}
 
-  @keyframes floatFlower {
-    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-  }
+/* Envelope body */
+#envelope {
+  width: 100%;
+  height: 180px;
+  background-color: #f9c5c8;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  text-align: center;
+}
 
-  /* Letter container */
-  #letter-container {
-    position: relative;
-    width: 300px;
-    height: 200px;
-    cursor: pointer;
-    perspective: 1000px;
-    z-index: 10;
-  }
+/* Flap - inverted */
+#flap {
+  width: 0;
+  height: 0;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+  border-top: 80px solid #f594a2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  transition: transform 0.5s;
+  transform-origin: top center;
+}
 
-  /* Closed letter */
-  #letter {
-    width: 100%;
-    height: 100%;
-    background: #ffe6e6;
-    border: 3px solid #ff4d4d;
-    border-radius: 10px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease-in-out;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
+/* Letter inside */
+#letter {
+  display: none;
+  width: 90%;
+  max-width: 450px;
+  max-height: 80vh;
+  background: #fff0f5;
+  border: 3px dashed #f9c5c8;
+  border-radius: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 25px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  position: relative;
+  word-wrap: break-word;
+}
 
-  /* Stamp */
-  #stamp {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 50px;
-    height: 50px;
-    background: url('https://i.imgur.com/RXfNn8f.png') no-repeat center/contain;
-    z-index: 2;
-  }
+/* Close button */
+#closeLetter {
+  position: sticky;
+  top: 0;
+  background: #f9c5c8;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
 
-  /* Open animation */
-  #letter.open {
-    transform: rotateX(180deg);
-  }
+/* Flowers */
+.flower {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  cursor: grab;
+  z-index: 1000;
+  transition: transform 0.2s ease, opacity 0.5s, filter 0.5s;
+}
+.flower:active {
+  transform: scale(1.2);
+}
+.flower.watered {
+  filter: brightness(1.6) drop-shadow(0 0 20px hotpink);
+  opacity: 1;
+}
 
-  /* Letter front and inside */
-  .front, .inside {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-    box-sizing: border-box;
-    text-align: center;
-  }
+/* Warning + Pot */
+#warning {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: pink;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 2000;
+  font-size: 18px;
+  font-weight: bold;
+}
 
-  .front {
-    z-index: 2;
-  }
+#watering-pot {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  cursor: grab;
+  display: none;
+  z-index: 2000;
+}
 
-  .inside {
-    background: #fff0f5;
-    color: #cc0000;
-    transform: rotateX(180deg);
-    font-size: 1rem;
-    line-height: 1.5;
-    font-family: 'Pacifico', cursive;
-  }
+/* Success message */
+#success-message {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: lightgreen;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  display: none;
+  z-index: 3000;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
 
-  /* Shake effect */
-  #letter.shake {
-    animation: shake 0.5s ease-in-out;
-  }
-
-  @keyframes shake {
-    0%,100% { transform: rotate(0deg); }
-    25% { transform: rotate(10deg); }
-    50% { transform: rotate(-10deg); }
-    75% { transform: rotate(8deg); }
-  }
-
-  /* Floating hearts */
-  .heart {
-    position: absolute;
-    color: #ff1a1a;
-    font-size: 20px;
-    text-shadow: 0 0 6px #ff0000cc;
-    animation: floatHeart ease-in-out infinite;
-  }
-
-  @keyframes floatHeart {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-  }
-
-  /* Fireworks canvas */
-  #confetti-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  /* Fireworks button */
-  #fireworks-btn {
-    position: fixed;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 12px 25px;
-    background: #ff4d4d;
-    border: none;
-    border-radius: 25px;
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    z-index: 20;
-  }
+/* Punishment */
+#punishment {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: red;
+  font-size: 30px;
+  font-weight: bold;
+  display: none;
+  z-index: 5000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  animation: fadeIn 1s ease forwards;
+}
+#punishment img {
+  max-width: 70%;
+  margin-top: 20px;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 </style>
 </head>
 <body>
 
-<!-- Floating flowers -->
-<div class="flower" style="left:10%; animation-duration:10s;"></div>
-<div class="flower" style="left:50%; animation-duration:12s;"></div>
-<div class="flower" style="left:80%; animation-duration:9s;"></div>
+<div id="envelope-container">
+  <div id="flap"></div>
+  <div id="envelope">Click to Open 💌</div>
+</div>
 
-<!-- Letter -->
-<div id="letter-container">
-  <div id="letter">
-    <div class="front">
-      <div id="stamp"></div>
-      💌 Click Me
-    </div>
-    <div class="inside">
-      My Love,<br><br>
-      Every moment with you is magic. I can't wait to see what the future holds for us.<br><br>
-      Yours always ❤️
-    </div>
+<div id="letter">
+  <button id="closeLetter">Close ✖</button>
+  <div class="letter-content">
+    <p>Dear you,</p>
+    <p>This is your scrollable cream letter. Write as much as you want, it will scroll endlessly!</p>
   </div>
 </div>
 
-<!-- Fireworks canvas -->
-<canvas id="confetti-canvas"></canvas>
-<button id="fireworks-btn">🎆 Celebrate! 🎆</button>
+<!-- Warning + pot + success -->
+<div id="warning">💧 Water the flowers or else...</div>
+<img id="watering-pot" src="https://static.vecteezy.com/system/resources/previews/011/887/663/original/hand-drawn-watering-pot-illustration-png.png" alt="Watering Pot">
+<div id="success-message">Phew that was close, thank you 🌸</div>
 
-<!-- Floating hearts -->
-<div class="heart" style="left:30vw; top:60vh;">❤</div>
-<div class="heart" style="left:70vw; top:50vh;">❤</div>
+<!-- Punishment -->
+<div id="punishment">
+  <p>You shouldn’t have done that...</p>
+  <img src="papa.jpg" alt="Old Man" style="width:400px; height:auto;">
+</div>
+
+<!-- ALL FLOWERS -->
+<img class="flower draggable" src="https://static.vecteezy.com/system/resources/previews/029/285/704/original/pink-flower-pink-flower-pink-flower-clipart-pink-flower-with-transparent-background-ai-generative-free-png.png"  style="width:80px; height:80px;">
+<img class="flower draggable" src="https://static.vecteezy.com/system/resources/previews/029/285/704/original/pink-flower-pink-flower-pink-flower-clipart-pink-flower-with-transparent-background-ai-generative-free-png.png" style="width:80px; height:80px;">
+<img class="flower draggable" src="https://png.pngtree.com/png-clipart/20231109/original/pngtree-pink-flower-cute-png-image_13522448.png" style="width:60px; height:60px;">
+<img class="flower draggable" src="https://png.pngtree.com/png-clipart/20231109/original/pngtree-pink-flower-cute-png-image_13522448.png" style="width:60px; height:60px;">
+<img class="flower draggable" src="https://www.pngarts.com/files/3/Pink-Flowers-PNG-Image.png">
+<img class="flower draggable" src="https://www.pngarts.com/files/3/Pink-Flowers-PNG-Image.png">
+<img class="flower draggable" src="https://png.pngtree.com/png-clipart/20231002/original/pngtree-pink-flower-isolate-png-file-png-image_13064989.png">
+<img class="flower draggable" src="https://png.pngtree.com/png-clipart/20231002/original/pngtree-pink-flower-isolate-png-file-png-image_13064989.png">
+<img class="flower draggable" src="https://ecuadorflowersandmore.com/wp-content/uploads/2022/12/DSC00256-1366x1366.png" style="width:70px; height:70px;">
+<img class="flower draggable" src="https://ecuadorflowersandmore.com/wp-content/uploads/2022/12/DSC00256-1366x1366.png" style="width:70px; height:70px;">
+<img class="flower draggable" src="https://static.vecteezy.com/system/resources/previews/039/244/999/non_2x/blooming-single-pink-gerbera-daisy-flower-free-png.png">
+<img class="flower draggable" src="https://static.vecteezy.com/system/resources/previews/039/244/999/non_2x/blooming-single-pink-gerbera-daisy-flower-free-png.png">
+<img class="flower draggable" src="https://i.pinimg.com/originals/84/fb/6f/84fb6f065dd268ad8e398553d7a27810.png" style="width:200px; height:200px;">
+<img class="flower draggable" src="https://www.pngarts.com/files/3/Pink-Flowers-PNG-Photo.png">
+<img class="flower draggable" src="https://png.pngtree.com/png-clipart/20231020/original/pngtree-blooming-pink-hibiscus-flower-on-isolated-background-png-image_13384486.png" style="width:60px; height:60px;">
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 <script>
-  const letter = document.getElementById('letter');
-  letter.addEventListener('click', () => {
-    letter.classList.add('shake');
-    setTimeout(() => {
-      letter.classList.remove('shake');
-      letter.classList.toggle('open');
-    }, 500);
-  });
+// Elements
+const envelopeContainer = document.getElementById('envelope-container');
+const envelope = document.getElementById('envelope');
+const flap = document.getElementById('flap');
+const letter = document.getElementById('letter');
+const closeLetter = document.getElementById('closeLetter');
+const warning = document.getElementById("warning");
+const pot = document.getElementById("watering-pot");
+const successMessage = document.getElementById("success-message");
+const punishment = document.getElementById("punishment");
+const flowers = document.querySelectorAll('.flower');
 
-  // Fireworks
-  const confettiCanvas = document.getElementById('confetti-canvas');
-  const fireworksBtn = document.getElementById('fireworks-btn');
+let wateredCount = 0;
+let punished = false;
 
-  fireworksBtn.addEventListener('click', () => {
+// Envelope open
+envelopeContainer.addEventListener('click', () => {
+  flap.style.transform = 'rotateX(180deg)';
+  setTimeout(() => {
+    envelope.style.display = 'none';
+    letter.style.display = 'block';
     confetti({
-      particleCount: 300,
-      spread: 160,
-      origin: { y: 0.5 }
+      particleCount: 400,
+      spread: 250,
+      origin: { y: 0.6 },
+      colors: ['#f9c5c8','#ffccd5','#fff4e6','#FF69B4','#FF1493']
     });
-  });
+  }, 500);
+});
+
+// Close letter
+closeLetter.addEventListener('click', () => {
+  letter.style.display = 'none';
+  envelope.style.display = 'flex';
+  flap.style.transform = 'rotateX(0deg)';
+});
+
+// Show warning + pot after 2 min
+setTimeout(() => {
+  if (!punished) {
+    warning.style.display = "block";
+    pot.style.display = "block";
+    // Give them 30s to water
+    setTimeout(() => {
+      if (wateredCount < flowers.length && !punished) {
+        punishment.style.display = "flex";
+        punished = true;
+      }
+    }, 20000);
+  }
+}, 120);
+
+// Drag pot to water flowers
+pot.onmousedown = function (e) {
+  const shiftX = e.clientX - pot.getBoundingClientRect().left;
+  const shiftY = e.clientY - pot.getBoundingClientRect().top;
+
+  function moveAt(pageX, pageY) {
+    pot.style.left = pageX - shiftX + "px";
+    pot.style.top = pageY - shiftY + "px";
+  }
+
+  function onMouseMove(e) {
+    moveAt(e.pageX, e.pageY);
+    flowers.forEach(flower => {
+      const flowerRect = flower.getBoundingClientRect();
+      const potRect = pot.getBoundingClientRect();
+
+      if (!(potRect.right < flowerRect.left ||
+            potRect.left > flowerRect.right ||
+            potRect.bottom < flowerRect.top ||
+            potRect.top > flowerRect.bottom)) {
+      if (!flower.classList.contains("watered")) {
+  flower.classList.add("watered");
+  wateredCount++;
+
+  // Add glow effect
+  flower.style.filter = "brightness(1.6) drop-shadow(0 0 20px hotpink)";
+  flower.style.transition = "transform 0.5s ease, filter 0.5s ease";
+  flower.style.transform += " scale(1.3)";
+  setTimeout(() => {
+    flower.style.transform = flower.style.transform.replace(" scale(1.3)", "");
+  }, 600);
+
+  // Remove glow after 5 seconds
+  setTimeout(() => {
+    flower.style.filter = "";  // returns to normal
+    flower.classList.remove("watered");
+  }, 5000);
+
+  if (wateredCount === flowers.length) {
+    successMessage.style.display = "block";
+    setTimeout(() => { successMessage.style.opacity = 0; }, 20000);
+    setTimeout(() => { successMessage.style.display = "none"; }, 30000);
+    warning.style.display = "none";
+    pot.style.display = "none";
+  }
+}
+      }
+    });
+  }
+
+  document.addEventListener("mousemove", onMouseMove);
+  pot.onmouseup = function () {
+    document.removeEventListener("mousemove", onMouseMove);
+    pot.onmouseup = null;
+  };
+};
+pot.ondragstart = () => false;
+
+// Draggable + floating flowers
+flowers.forEach(flower => {
+  // Random starting position
+  flower.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+  flower.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+
+  flower.addEventListener('mousedown', dragStart);
+  function dragStart(e) {
+    e.preventDefault();
+    let shiftX = e.clientX - flower.getBoundingClientRect().left;
+    let shiftY = e.clientY - flower.getBoundingClientRect().top;
+
+    function moveAt(pageX, pageY) {
+      flower.style.left = pageX - shiftX + 'px';
+      flower.style.top = pageY - shiftY + 'px';
+    }
+
+    function onMouseMove(e) {
+      moveAt(e.pageX, e.pageY);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', function() {
+      document.removeEventListener('mousemove', onMouseMove);
+    }, { once: true });
+  }
+  flower.ondragstart = () => false;
+
+  // Floating
+  let dx = (Math.random() - 0.5) * 0.5;
+  let dy = (Math.random() - 0.5) * 0.5;
+  let rotation = Math.random() * 360;
+  let rotationSpeed = (Math.random() - 0.5) * 0.5;
+
+  setInterval(() => {
+    if (!flower.matches(':active')) {
+      let top = parseFloat(flower.style.top);
+      let left = parseFloat(flower.style.left);
+
+      if (top + dy < 0 || top + dy > window.innerHeight - 50) dy = -dy;
+      if (left + dx < 0 || left + dx > window.innerWidth - 50) dx = -dx;
+
+      flower.style.top = top + dy + 'px';
+      flower.style.left = left + dx + 'px';
+
+      rotation += rotationSpeed;
+      flower.style.transform = `rotate(${rotation}deg)`;
+    }
+  }, 20);
+});
 </script>
 </body>
-</html>
-
+</html
