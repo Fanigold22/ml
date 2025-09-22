@@ -270,18 +270,16 @@ setTimeout(() => {
   }
 }, 120);
 
-// Drag pot to water flowers
-pot.onmousedown = function (e) {
-  const shiftX = e.clientX - pot.getBoundingClientRect().left;
-  const shiftY = e.clientY - pot.getBoundingClientRect().top;
+// Drag pot to water flowers (mouse + touch)
+function startDrag(pageX, pageY) {
+  const shiftX = pageX - pot.getBoundingClientRect().left;
+  const shiftY = pageY - pot.getBoundingClientRect().top;
 
-  function moveAt(pageX, pageY) {
-    pot.style.left = pageX - shiftX + "px";
-    pot.style.top = pageY - shiftY + "px";
-  }
+  function moveAt(x, y) {
+    pot.style.left = x - shiftX + "px";
+    pot.style.top = y - shiftY + "px";
 
-  function onMouseMove(e) {
-    moveAt(e.pageX, e.pageY);
+    // Watering logic
     flowers.forEach(flower => {
       const flowerRect = flower.getBoundingClientRect();
       const potRect = pot.getBoundingClientRect();
@@ -290,71 +288,132 @@ pot.onmousedown = function (e) {
             potRect.left > flowerRect.right ||
             potRect.bottom < flowerRect.top ||
             potRect.top > flowerRect.bottom)) {
-      if (!flower.classList.contains("watered")) {
-  flower.classList.add("watered");
-  wateredCount++;
+        if (!flower.classList.contains("watered")) {
+          flower.classList.add("watered");
+          wateredCount++;
 
-  // Add glow effect
-  flower.style.filter = "brightness(1.6) drop-shadow(0 0 20px hotpink)";
-  flower.style.transition = "transform 0.5s ease, filter 0.5s ease";
-  flower.style.transform += " scale(1.3)";
-  setTimeout(() => {
-    flower.style.transform = flower.style.transform.replace(" scale(1.3)", "");
-  }, 600);
+          // Glow effect
+          flower.style.filter = "brightness(1.6) drop-shadow(0 0 20px hotpink)";
+          flower.style.transition = "transform 0.5s ease, filter 0.5s ease";
+          flower.style.transform += " scale(1.3)";
+          setTimeout(() => {
+            flower.style.transform = flower.style.transform.replace(" scale(1.3)", "");
+          }, 600);
 
-  // Remove glow after 5 seconds
-  setTimeout(() => {
-    flower.style.filter = "";  // returns to normal
-    flower.classList.remove("watered");
-  }, 5000);
+          // Remove glow after 5 seconds
+          setTimeout(() => {
+            flower.style.filter = "";
+            flower.classList.remove("watered");
+          }, 5000);
 
-  if (wateredCount === flowers.length) {
-    successMessage.style.display = "block";
-    setTimeout(() => { successMessage.style.opacity = 0; }, 20000);
-    setTimeout(() => { successMessage.style.display = "none"; }, 30000);
-    warning.style.display = "none";
-    pot.style.display = "none";
-  }
-}
+          if (wateredCount === flowers.length) {
+            successMessage.style.display = "block";
+            setTimeout(() => { successMessage.style.opacity = 0; }, 20000);
+            setTimeout(() => { successMessage.style.display = "none"; }, 30000);
+            warning.style.display = "none";
+            pot.style.display = "none";
+          }
+        }
       }
     });
   }
 
+  function onMouseMove(e) {
+    moveAt(e.pageX, e.pageY);
+  }
+  function onTouchMove(e) {
+    moveAt(e.touches[0].clientX, e.touches[0].clientY);
+  }
+
   document.addEventListener("mousemove", onMouseMove);
-  pot.onmouseup = function () {
+  document.addEventListener("touchmove", onTouchMove);
+
+  function stopDrag() {
     document.removeEventListener("mousemove", onMouseMove);
-    pot.onmouseup = null;
-  };
+    document.removeEventListener("mouseup", stopDrag);
+    document.removeEventListener("touchmove", onTouchMove);
+    document.removeEventListener("touchend", stopDrag);
+  }
+
+  document.addEventListener("mouseup", stopDrag);
+  document.addEventListener("touchend", stopDrag);
+}
+
+pot.onmousedown = (e) => startDrag(e.pageX, e.pageY);
+pot.ontouchstart = (e) => {
+  e.preventDefault();
+  startDrag(e.touches[0].clientX, e.touches[0].clientY);
 };
 pot.ondragstart = () => false;
 
+
+// Draggable + floating flowers
 // Draggable + floating flowers
 flowers.forEach(flower => {
   // Random starting position
   flower.style.top = Math.random() * (window.innerHeight - 50) + 'px';
   flower.style.left = Math.random() * (window.innerWidth - 50) + 'px';
 
-  flower.addEventListener('mousedown', dragStart);
-  function dragStart(e) {
-    e.preventDefault();
-    let shiftX = e.clientX - flower.getBoundingClientRect().left;
-    let shiftY = e.clientY - flower.getBoundingClientRect().top;
+  function startFlowerDrag(pageX, pageY) {
+    let shiftX = pageX - flower.getBoundingClientRect().left;
+    let shiftY = pageY - flower.getBoundingClientRect().top;
 
-    function moveAt(pageX, pageY) {
-      flower.style.left = pageX - shiftX + 'px';
-      flower.style.top = pageY - shiftY + 'px';
+    function moveAt(x, y) {
+      flower.style.left = x - shiftX + 'px';
+      flower.style.top = y - shiftY + 'px';
     }
 
     function onMouseMove(e) {
       moveAt(e.pageX, e.pageY);
     }
+    function onTouchMove(e) {
+      moveAt(e.touches[0].clientX, e.touches[0].clientY);
+    }
 
     document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', function() {
+    document.addEventListener('touchmove', onTouchMove);
+
+    function stopDrag() {
       document.removeEventListener('mousemove', onMouseMove);
-    }, { once: true });
+      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', stopDrag);
+    }
+
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchend', stopDrag);
   }
+
+  flower.addEventListener('mousedown', (e) => startFlowerDrag(e.pageX, e.pageY));
+  flower.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    startFlowerDrag(e.touches[0].clientX, e.touches[0].clientY);
+  });
+
   flower.ondragstart = () => false;
+
+  // Floating effect (keep as is)
+  let dx = (Math.random() - 0.5) * 0.5;
+  let dy = (Math.random() - 0.5) * 0.5;
+  let rotation = Math.random() * 360;
+  let rotationSpeed = (Math.random() - 0.5) * 0.5;
+
+  setInterval(() => {
+    if (!flower.matches(':active')) {
+      let top = parseFloat(flower.style.top);
+      let left = parseFloat(flower.style.left);
+
+      if (top + dy < 0 || top + dy > window.innerHeight - 50) dy = -dy;
+      if (left + dx < 0 || left + dx > window.innerWidth - 50) dx = -dx;
+
+      flower.style.top = top + dy + 'px';
+      flower.style.left = left + dx + 'px';
+
+      rotation += rotationSpeed;
+      flower.style.transform = `rotate(${rotation}deg)`;
+    }
+  }, 20);
+});
 
   // Floating
   let dx = (Math.random() - 0.5) * 0.5;
