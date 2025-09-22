@@ -81,36 +81,56 @@
       font-size: 1.1rem;
     }
 
-    .heart-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: -1;
-    }
+  .heart-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+  }
 
-    .heart {
-      width: 20px;
-      height: 20px;
-      background: red;
-      position: absolute;
-      top: 100vh;
-      left: calc(100% * var(--x));
-      animation: floatHearts 8s linear infinite;
-      clip-path: path('M10 30 C10 0, 50 0, 50 30 C50 60, 10 60, 10 30 Z');
-    }
+  .heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    top: 100vh;
+    left: calc(100% * var(--x));
+    transform: rotate(45deg);
+    animation: floatHearts 8s linear infinite;
+  }
 
-    @keyframes floatHearts {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-100vh); opacity: 0; }
-    }
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+  }
+
+  .heart::before {
+    top: -10px;
+    left: 0;
+  }
+
+  .heart::after {
+    left: -10px;
+    top: 0;
+  }
+
+  @keyframes floatHearts {
+    0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+  }
   </style>
 </head>
 <body>
-  <h1 class="glow-title">Play With Me 🎮</h1>
+  <h1 class="glow-title">Mini Games!</h1>
 
   <div class="games-wrapper">
     <div class="game-card">
@@ -128,11 +148,6 @@
       <p>Stay focused!</p>
       <a href="clicker.html" target="_blank">Play</a>
     </div>
-      <div class="game-card">
-      <h2>Puzzle</h2>
-      <p>Connect the Pieces!</p>
-      <a href="puzzle.html" target="_blank">Play</a>
-    </div>
   </div>
 
 
@@ -146,6 +161,7 @@
   </div>
 </body>
 </html>
+
 
 
 
