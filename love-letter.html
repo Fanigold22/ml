@@ -414,29 +414,6 @@ flowers.forEach(flower => {
     }
   }, 20);
 });
-
-  // Floating
-  let dx = (Math.random() - 0.5) * 0.5;
-  let dy = (Math.random() - 0.5) * 0.5;
-  let rotation = Math.random() * 360;
-  let rotationSpeed = (Math.random() - 0.5) * 0.5;
-
-  setInterval(() => {
-    if (!flower.matches(':active')) {
-      let top = parseFloat(flower.style.top);
-      let left = parseFloat(flower.style.left);
-
-      if (top + dy < 0 || top + dy > window.innerHeight - 50) dy = -dy;
-      if (left + dx < 0 || left + dx > window.innerWidth - 50) dx = -dx;
-
-      flower.style.top = top + dy + 'px';
-      flower.style.left = left + dx + 'px';
-
-      rotation += rotationSpeed;
-      flower.style.transform = `rotate(${rotation}deg)`;
-    }
-  }, 20);
-});
 </script>
 </body>
 </html
