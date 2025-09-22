@@ -145,375 +145,194 @@
 
   let clicks = 0;
   const maxClicks = 184;
-
-  const reasons = Array.from({ length: maxClicks }, (_, i) => `Reason #${i + 1}: ["I love your laugh.",
-
+const reasons = [
+"I love your laugh.",
 "I love your sarcasm.",
-
 "I love your smile.",
-
 "I love your kindness.",
-
-"I love your brown eyes." ,
-
+"I love your brown eyes.",
 "I love your hair.",
-
 "I love how you tease me.",
-
 "I love your focus when you draw.",
-
 "I love your humor.",
-
 "I love your thoughtfulness.",
-
 "I love how you make me feel safe.",
-
 "I love how you brighten my day.",
-
 "I love your little expressions.",
-
 "I love how you care about art.",
-
-I love the way you listen.
-
-I love your confidence.
-
-I love your voice.
-
-I love your excitement about things.
-
-I love your hugs.
-
-I love how real you are.
-
-I love your energy.
-
-I love your smile when happy.
-
-I love your compassion.
-
-I love your jokes.
-
-I love your focus on details.
-
-I love your support.
-
-I love your creativity.
-
-I love your style.
-
-I love your gentle heart.
-
-I love your curiosity.
-
-I love your determination.
-
-I love your playful side.
-
-I love your surprises.
-
-I love your enthusiasm.
-
-I love your silly faces.
-
-I love your patience.
-
-I love your warm hugs.
-
-I love the way you make me calm.
-
-I love how you make things fun.
-
-I love your honesty.
-
-I love how you notice little things.
-
-I love your singing voice.
-
-I love how you care for people.
-
-I love the way you light up rooms.
-
-I love your teasing.
-
-I love your smile in the morning.
-
-I love your focus when working.
-
-I love your creativity in art.
-
-I love your little quirks.
-
-I love how you make me laugh uncontrollably.
-
-I love your thoughtfulness in texts.
-
-I love how you hug tightly.
-
-I love your imagination.
-
-I love your dancing.
-
-I love your playfulness.
-
-I love your encouragement.
-
-I love your curiosity about life.
-
-I love your confident walks.
-
-I love your tiny gestures.
-
-I love how you make me feel loved.
-
-I love your eye expressions.
-
-I love your facial expressions when focused.
-
-I love your kindness to strangers.
-
-I love your creativity in solving problems.
-
-I love your teasing voice.
-
-I love how you make boring moments fun.
-
-I love how you care about your passions.
-
-I love your sense of adventure.
-
-I love your cozy hugs.
-
-I love your thoughtful compliments.
-
-I love how you laugh at my quirks.
-
-I love your intelligence.
-
-I love how you notice small changes.
-
-I love how you make me feel special.
-
-I love your gentle teasing.
-
-I love your attention to details.
-
-I love your little smiles at me.
-
-I love your excitement for small things.
-
-I love your calm when things go wrong.
-
-I love your optimism.
-
-I love your honesty in everything.
-
-I love your kindness to animals.
-
-I love your playful mood.
-
-I love your creativity in ideas.
-
-I love how you make friends feel comfortable.
-
-I love your humor in awkward moments.
-
-I love your supportive nature.
-
-I love your enthusiasm for music.
-
-I love your patience with me.
-
-I love how you notice my moods.
-
-I love your excited gestures.
-
-I love your artistic sense.
-
-I love your little laugh-snorts.
-
-I love your warm presence.
-
-I love your soft voice.
-
-I love your confidence in yourself.
-
-I love your quirky jokes.
-
-I love how you care about family.
-
-I love how you brighten my thoughts.
-
-I love your playful smiles.
-
-I love your hugs in public.
-
-I love your curiosity for new things.
-
-I love your silly nicknames.
-
-I love your sharp wit.
-
-I love your encouragement when I doubt myself.
-
-I love your focus when you’re serious.
-
-I love your little laughs at inside jokes.
-
-I love your caring texts.
-
-I love your hugs after bad days.
-
-I love your playful eye rolls.
-
-I love your excitement for food.
-
-I love your jokes that only we get.
-
-I love your tiny acts of thoughtfulness.
-
-I love your smiles when proud.
-
-I love your little dramatic gestures.
-
-I love your reassurance when I’m anxious.
-
-I love your love for music.
-
-I love your cute stretches.
-
-I love your little humming while drawing.
-
-I love your teasing laugh.
-
-I love how you make ordinary things exciting.
-
-I love your gentle touches.
-
-I love how your hair smells.
-
-I love your fashion choices.
-
-I love how excited you get about hobbies.
-
-I love your playful nudges.
-
-I love how your eyes light up when happy.
-
-I love how you care about small details.
-
-I love your reassuring smiles.
-
-I love your warmth in hugs.
-
-I love your playful dances.
-
-I love your enthusiasm for stories.
-
-I love your little laughter bursts.
-
-I love how you cheer me on.
-
-I love your gentle teasing whispers.
-
-I love your curiosity about the world.
-
-I love how you brighten rainy days.
-
-I love your soft hand-holds.
-
-I love your playful winks.
-
-I love your creativity in doodles.
-
-I love how you sing in the shower.
-
-I love your playful imagination.
-
-I love your gentle nudges.
-
-I love how you notice the little things about me.
-
-I love your soft smiles when tired.
-
-I love how you make goodbyes sweet.
-
-I love your playful competitiveness.
-
-I love your silly expressions while thinking.
-
-I love your warm presence in silence.
-
-I love your quiet encouragement.
-
-I love your cheerful voice.
-
-I love your silly dances when happy.
-
-I love your quirky jokes at random times.
-
-I love your thoughtful gifts.
-
-I love how your eyes sparkle when excited.
-
-I love your little laughs when embarrassed.
-
-I love your cozy hugs at night.
-
-I love your playful teasing on calls.
-
-I love how you celebrate small wins.
-
-I love your funny impressions.
-
-I love your sweet texts just because.
-
-I love your gentle reassurance.
-
-I love your cute surprised faces.
-
-I love your playful challenges.
-
-I love how you notice what I like.
-
-I love your soft kisses on my cheek.
-
-I love your funny stories.
-
-I love your tiny happy dances.
-
-I love your silly laughs at memes.
-
-I love your thoughtful advice.
-
-I love your excited shouts at surprises.
-
-I love your playful whispers.
-
-I love your creative ideas.
-
-I love your subtle compliments.
-
-I love your soft hair when I hug you.
-
-I love your goofy faces when tired.
-
-I love your quiet patience.
-
-I love your encouraging words.
-
-I love your playful hand gestures.
-
-I love your silly song remixes.
-
-I love your little proud smiles.
-
-I love your excited energy in new places.
-
-I love your quiet understanding.
-
-I love you.]`);
-
+"I love the way you listen.",
+"I love your confidence.",
+"I love your voice.",
+"I love your excitement about things.",
+"I love your hugs.",
+"I love how real you are.",
+"I love your energy.",
+"I love your smile when happy.",
+"I love your compassion.",
+"I love your jokes.",
+"I love your focus on details.",
+"I love your support.",
+"I love your creativity.",
+"I love your style.",
+"I love your gentle heart.",
+"I love your curiosity.",
+"I love your determination.",
+"I love your playful side.",
+"I love your surprises.",
+"I love your enthusiasm.",
+"I love your silly faces.",
+"I love your patience.",
+"I love your warm hugs.",
+"I love the way you make me calm.",
+"I love how you make things fun.",
+"I love your honesty.",
+"I love how you notice little things.",
+"I love your singing voice.",
+"I love how you care for people.",
+"I love the way you light up rooms.",
+"I love your teasing.",
+"I love your smile in the morning.",
+"I love your focus when working.",
+"I love your creativity in art.",
+"I love your little quirks.",
+"I love how you make me laugh uncontrollably.",
+"I love your thoughtfulness in texts.",
+"I love how you hug tightly.",
+"I love your imagination.",
+"I love your dancing.",
+"I love your playfulness.",
+"I love your encouragement.",
+"I love your curiosity about life.",
+"I love your confident walks.",
+"I love your tiny gestures.",
+"I love how you make me feel loved.",
+"I love your eye expressions.",
+"I love your facial expressions when focused.",
+"I love your kindness to strangers.",
+"I love your creativity in solving problems.",
+"I love your teasing voice.",
+"I love how you make boring moments fun.",
+"I love how you care about your passions.",
+"I love your sense of adventure.",
+"I love your cozy hugs.",
+"I love your thoughtful compliments.",
+"I love how you laugh at my quirks.",
+"I love your intelligence.",
+"I love how you notice small changes.",
+"I love how you make me feel special.",
+"I love your gentle teasing.",
+"I love your attention to details.",
+"I love your little smiles at me.",
+"I love your excitement for small things.",
+"I love your calm when things go wrong.",
+"I love your optimism.",
+"I love your honesty in everything.",
+"I love your kindness to animals.",
+"I love your playful mood.",
+"I love your creativity in ideas.",
+"I love how you make friends feel comfortable.",
+"I love your humor in awkward moments.",
+"I love your supportive nature.",
+"I love your enthusiasm for music.",
+"I love your patience with me.",
+"I love how you notice my moods.",
+"I love your excited gestures.",
+"I love your artistic sense.",
+"I love your little laugh-snorts.",
+"I love your warm presence.",
+"I love your soft voice.",
+"I love your confidence in yourself.",
+"I love your quirky jokes.",
+"I love how you care about family.",
+"I love how you brighten my thoughts.",
+"I love your playful smiles.",
+"I love your hugs in public.",
+"I love your curiosity for new things.",
+"I love your silly nicknames.",
+"I love your sharp wit.",
+"I love your encouragement when I doubt myself.",
+"I love your focus when you’re serious.",
+"I love your little laughs at inside jokes.",
+"I love your caring texts.",
+"I love your hugs after bad days.",
+"I love your playful eye rolls.",
+"I love your excitement for food.",
+"I love your jokes that only we get.",
+"I love your tiny acts of thoughtfulness.",
+"I love your smiles when proud.",
+"I love your little dramatic gestures.",
+"I love your reassurance when I’m anxious.",
+"I love your love for music.",
+"I love your cute stretches.",
+"I love your little humming while drawing.",
+"I love your teasing laugh.",
+"I love how you make ordinary things exciting.",
+"I love your gentle touches.",
+"I love how your hair smells.",
+"I love your fashion choices.",
+"I love how excited you get about hobbies.",
+"I love your playful nudges.",
+"I love how your eyes light up when happy.",
+"I love how you care about small details.",
+"I love your reassuring smiles.",
+"I love your warmth in hugs.",
+"I love your playful dances.",
+"I love your enthusiasm for stories.",
+"I love your little laughter bursts.",
+"I love how you cheer me on.",
+"I love your gentle teasing whispers.",
+"I love your curiosity about the world.",
+"I love how you brighten rainy days.",
+"I love your soft hand-holds.",
+"I love your playful winks.",
+"I love your creativity in doodles.",
+"I love how you sing in the shower.",
+"I love your playful imagination.",
+"I love your gentle nudges.",
+"I love how you notice the little things about me.",
+"I love your soft smiles when tired.",
+"I love how you make goodbyes sweet.",
+"I love your playful competitiveness.",
+"I love your silly expressions while thinking.",
+"I love your warm presence in silence.",
+"I love your quiet patience.",
+"I love your cheerful voice.",
+"I love your silly dances when happy.",
+"I love your quirky jokes at random times.",
+"I love your thoughtful gifts.",
+"I love how your eyes sparkle when excited.",
+"I love your little laughs when embarrassed.",
+"I love your cozy hugs at night.",
+"I love your playful teasing on calls.",
+"I love how you celebrate small wins.",
+"I love your funny impressions.",
+"I love your sweet texts just because.",
+"I love your gentle reassurance.",
+"I love your cute surprised faces.",
+"I love your playful challenges.",
+"I love how you notice what I like.",
+"I love your soft kisses on my cheek.",
+"I love your funny stories.",
+"I love your tiny happy dances.",
+"I love your silly laughs at memes.",
+"I love your thoughtful advice.",
+"I love your excited shouts at surprises.",
+"I love your playful whispers.",
+"I love your creative ideas.",
+"I love your subtle compliments.",
+"I love your soft hair when I hug you.",
+"I love your goofy faces when tired.",
+"I love your quiet patience.",
+"I love your encouraging words.",
+"I love your playful hand gestures.",
+"I love your silly song remixes.",
+"I love your little proud smiles.",
+"I love your excited energy in new places.",
+"I love your quiet understanding.",
+"I love you."
+];
+
+ 
   heart.addEventListener('click', () => {
     if (clicks >= maxClicks) return;
 
@@ -547,6 +366,7 @@ I love you.]`);
 
 </body>
 </html>
+
 
 
 
