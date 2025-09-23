@@ -171,6 +171,18 @@ body {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+#red-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: red;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4000; /* above flowers, below punishment */
+  transition: opacity 0.3s ease;
+}
 </style>
 </head>
 <body>
@@ -217,6 +229,8 @@ Fani</p>
   <p>You shouldn’t have done that...</p>
   <img src="papa.jpg" alt="Old Man" style="width:400px; height:auto;">
 </div>
+<div id="red-flash"></div>
+
 
 <!-- ALL FLOWERS -->
 <img class="flower draggable" src="https://static.vecteezy.com/system/resources/previews/029/285/704/original/pink-flower-pink-flower-pink-flower-clipart-pink-flower-with-transparent-background-ai-generative-free-png.png"  style="width:80px; height:80px;">
@@ -275,10 +289,26 @@ closeLetter.addEventListener('click', () => {
 });
 
 // Show warning + pot after 2 min
+// Flash function
+function flashRed(times = 3, interval = 500) {
+  let count = 0;
+  const flash = setInterval(() => {
+    document.getElementById('red-flash').style.opacity = '0.5';
+    setTimeout(() => {
+      document.getElementById('red-flash').style.opacity = '0';
+    }, interval / 2);
+    count++;
+    if (count >= times) clearInterval(flash);
+  }, interval);
+}
+
+// Show warning + flash
 setTimeout(() => {
   if (!punished) {
     warning.style.display = "block";
     pot.style.display = "block";
+    flashRed(6, 400); // flashes 6 times, every 400ms
+
     // Give them 30s to water
     setTimeout(() => {
       if (wateredCount < flowers.length && !punished) {
@@ -288,6 +318,7 @@ setTimeout(() => {
     }, 20000);
   }
 }, 120);
+
 
 // Drag pot to water flowers (mouse + touch)
 function startDrag(pageX, pageY) {
