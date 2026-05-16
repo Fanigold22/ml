@@ -70,6 +70,26 @@
     p { font-size: 1.2rem; max-width: 450px; line-height: 1.5; color: #ff6666; margin-bottom: 40px; }
     #timer { font-family: monospace; font-size: 1.5rem; color: #ff4d4d; text-shadow: 0 0 10px #cc0000aa; margin-bottom: 50px; letter-spacing: 2px; }
 
+    .press-btn{
+  display:block;
+  margin:40px auto;
+  padding:25px 60px;
+  font-size:32px;
+  border:none;
+  border-radius:20px;
+  background:#f9c5c8;
+  color:#5a3c3f;
+  cursor:pointer;
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.15),
+    0 0 20px rgba(249,197,200,0.7);
+  transition:0.3s;
+}
+
+.press-btn:hover{
+  transform:scale(1.08);
+  background:#ffd9dc;
+}
     #play-music { background: #8b0000; border: none; padding: 14px 28px; border-radius: 50px; font-size: 1.2rem; color: white; cursor: pointer; box-shadow: 0 0 20px #b22222cc; transition: background 0.3s; user-select: none; }
     #play-music:hover { background: #550000; box-shadow: 0 0 35px #880000cc; }
 
@@ -204,12 +224,14 @@
     <div id="passwordError">Incorrect password, try again.</div>
   <div id="passwordHint">hint: our first kiss</div>
   </div>
-
+  
   <div id="hearts-container"></div>
-
+ <button class="press-btn" onclick="window.location.href='sorry.html'">
+  Press Me
+</button>
   <div id="content">
     <h1>Time Together:</h1>
-    <h2>Happy 9 months love! You make time feel beautiful;)</h2>
+    <h2>Happy one year and one month love! You make time feel beautiful;)</h2>
     <div id="timer">Calculating...</div>
     <p>No matter how my day goes, you’ll always be the best part of it.</p>
     <button id="play-music">press me. now.</button>
