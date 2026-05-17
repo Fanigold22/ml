@@ -219,6 +219,7 @@ const songs = [
 ];
 
 let current = 0;
+let musicStarted = false;
 
 const music = document.getElementById("bgmusic");
 const video = document.querySelector("iframe");
@@ -236,10 +237,6 @@ music.addEventListener("ended", () => {
 video.addEventListener("click", () => {
   music.pause();
 });
-
-/* ✅ START MUSIC HERE (after function exists) */
-playSong(0);
-  
 const answers = [
 "Yes",
 "Absolutely",
@@ -261,7 +258,10 @@ const answers = [
 ];
 
 function shakeBall(){
-
+if (!musicStarted) {
+  playSong(0);
+  musicStarted = true;
+}
 const ball = document.getElementById("ball");
 const answer = document.getElementById("answer");
 
