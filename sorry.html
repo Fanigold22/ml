@@ -192,7 +192,20 @@ ASK THE MAGIC 8 BALL IF WE SHOULD GET BACK TOGETHER
     Sorry i thought it was funny...anyways 
  </h2>
 <!-- VIDEO SECTION -->
-<div style="text-align:center; margin:60px 0;">
+<div style="text-align:center; margin-top:40px;">
+  <button onclick="stopMusic()" style="
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#d87a87;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+  ">
+    Stop the music
+  </button>
+</div>
+    <div style="text-align:center; margin:60px 0;">
   <h2 style="color:#d87a87; margin-bottom:20px;">
     this is everything I couldn’t say in words
   </h2>
@@ -228,7 +241,17 @@ function playSong(index){
   music.src = songs[index];
   music.play().catch(()=>{});
 }
-
+function stopMusic(){
+  let fade = setInterval(() => {
+    if (music.volume > 0.05) {
+      music.volume -= 0.05;
+    } else {
+      music.pause();
+      music.volume = 1;
+      clearInterval(fade);
+    }
+  }, 100);
+}
 music.addEventListener("ended", () => {
   current = (current + 1) % songs.length;
   playSong(current);
