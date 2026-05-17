@@ -223,21 +223,22 @@ let current = 0;
 const music = document.getElementById("bgmusic");
 const video = document.querySelector("iframe");
 
-video.addEventListener("click", () => {
-  music.pause();
-});
-playSong(0);
-  
-  
 function playSong(index){
   music.src = songs[index];
-  music.play();
+  music.play().catch(()=>{});
 }
 
 music.addEventListener("ended", () => {
   current = (current + 1) % songs.length;
   playSong(current);
 });
+
+video.addEventListener("click", () => {
+  music.pause();
+});
+
+/* ✅ START MUSIC HERE (after function exists) */
+playSong(0);
   
 const answers = [
 "Yes",
