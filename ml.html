@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>redesign check</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,600;1,400&display=swap');
 
     /* Reset & base */
     * {
@@ -15,12 +15,11 @@
       box-sizing: border-box;
     }
     body, html {
-      height: 100%;
+      min-height: 100vh;
       background: #fff8f7;
       color: #9b6f7b;
       font-family: 'Poppins', sans-serif;
       overflow-y: auto;
-      max-height: 100vh;
       position: relative;
       user-select: none;
     }
@@ -56,97 +55,64 @@
     #content {
       position: relative;
       z-index: 10;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 0 20px;
+      padding: 70px 24px 30px;
+      min-height: 100vh;
     }
+
+    #content > * { position: relative; }
+    #content::before { content: '♡  ✧  ♡'; color: #dfb3c4; letter-spacing: 12px; font-size: 1rem; margin-bottom: 18px; }
 
     h1 { font-family: 'Pacifico', cursive; font-size: clamp(2.6rem, 7vw, 4rem); color: #bd8298; text-shadow: 0 3px 0 #fff, 0 7px 20px #e9c5d2aa; margin-bottom: 10px; }
     h2 { font-weight: 400; font-size: clamp(1.15rem, 3vw, 1.8rem); margin-bottom: 25px; color: #b98296; text-shadow: none; }
     p { font-size: 1.08rem; max-width: 450px; line-height: 1.8; color: #a77d8b; margin-bottom: 32px; }
     #timer { font-family: 'Poppins', sans-serif; font-size: clamp(1rem, 3vw, 1.4rem); color: #b47f94; background: #fff; border: 1px solid #f0d9e1; border-radius: 22px; padding: 13px 22px; box-shadow: 0 8px 24px #d9b4c31c; margin-bottom: 35px; letter-spacing: 1px; }
 
-    .press-btn{
-  display:block;
-  margin:40px auto;
-  padding:25px 60px;
-  font-size:32px;
-  border:none;
-  border-radius:20px;
-  background: linear-gradient(135deg, #e9b8c9, #d89bb4);
-  color:#fffafc;
-  cursor:pointer;
-  box-shadow: 0 8px 22px rgba(190,130,153,0.22), inset 0 1px 0 #ffffff88;
-  transition:0.3s;
-}
-
-.press-btn:hover{
-  transform:scale(1.08);
-  background: linear-gradient(135deg, #f7dce5, #edc4d4); color: #966779;
-}
     #play-music { background: #e8b9ca; border: 1px solid #dfadc0; padding: 14px 28px; border-radius: 50px; font-size: 1rem; color: #fff; cursor: pointer; box-shadow: 0 7px 18px #d7a8ba55; transition: background 0.3s, transform 0.3s; user-select: none; }
     #play-music:hover { background: #d99eb5; transform: translateY(-2px); box-shadow: 0 9px 22px #d7a8ba66; }
 
     #songs-link { margin-top: 26px; font-size: 0.95rem; color: #b98296; cursor: pointer; text-decoration: underline; text-decoration-color: #e4bdcc; text-underline-offset: 4px; user-select: none; }
     #songs-link:hover { color: #966779; }
-    .gallery-btn {
-    display: inline-block;
-    padding: 6px 14px;
-    background: #f0d5df;
-    color: #9b6f7b;
-    font-family: "Poppins", sans-serif;
-    font-size: 0.85rem;
-    text-decoration: none;
-    border-radius: 18px;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    transition: 0.25s;
-    border: 1px solid #e7c4d1;
-    box-shadow: 0 4px 12px rgba(190, 130, 153, 0.15);
-  }
 
-  .gallery-btn:hover {
-    background: #cc002a;
-    transform: scale(1.05);
-    box-shadow: 0 0 12px rgba(204, 0, 42, 0.5);
-  }
+    #content h3 { margin-top: 30px; color: #c69aaa; font-size: 0.9rem; font-weight: 400; letter-spacing: 1px; }
+    #content a { color: #b98296 !important; text-decoration-color: #e4bdcc !important; text-underline-offset: 4px; margin-top: 18px; }
 
-#left-img {
-  position: fixed;
-  top: 50%;
-  left: 10px;
-  width: 190px; /* smaller */
-  border-radius: 12px;
-  cursor: grab;
-  z-index: 10001;
-  animation: floatSide 4s ease-in-out infinite;
-  transition: transform 0.2s ease;
-}
+    /* Side images */
+    #left-img {
+      position: fixed;
+      top: 50%;
+      left: 10px;
+      width: 190px;
+      border-radius: 12px;
+      cursor: grab;
+      z-index: 10001;
+      animation: floatSide 4s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
 
-#right-img {
-  position: fixed;
-  top: 50%;
-  right: 10px;
-  width: 300px; /* bigger */
-  border-radius: 12px;
-  cursor: grab;
-  z-index: 10001;
-  animation: floatSide 5s ease-in-out infinite;
-  transition: transform 0.2s ease;
-}
+    #right-img {
+      position: fixed;
+      top: 50%;
+      right: 10px;
+      width: 300px;
+      border-radius: 12px;
+      cursor: grab;
+      z-index: 10001;
+      animation: floatSide 5s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
 
-/* Floating animation */
-@keyframes floatSide {
-  0%   { transform: translate(0px, 0px); }
-  25%  { transform: translate(5px, -5px); }
-  50%  { transform: translate(0px, -10px); }
-  75%  { transform: translate(-5px, -5px); }
-  100% { transform: translate(0px, 0px); }
-}
+    @keyframes floatSide {
+      0%   { transform: translate(0px, 0px); }
+      25%  { transform: translate(5px, -5px); }
+      50%  { transform: translate(0px, -10px); }
+      75%  { transform: translate(-5px, -5px); }
+      100% { transform: translate(0px, 0px); }
+    }
 
     #fun-message {
       position: fixed;
@@ -160,7 +126,7 @@
       z-index: 10002;
     }
 
-    /* Puzzle container */
+    /* Puzzle section */
     #puzzle-container {
       width: 600px;
       height: 400px;
@@ -169,6 +135,10 @@
       position: relative;
       background: #fffafc;
       z-index: 10;
+      max-width: calc(100vw - 28px);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 35px #d9b4c322;
     }
     .puzzle-piece {
       width: 150px;
@@ -181,6 +151,133 @@
     .puzzle-piece.correct {
       cursor: default;
       box-shadow: 0 5px 16px #dba9bd88;
+    }
+
+    /* Secret Heart Lock Section */
+    #scatteredKey {
+      position: fixed;
+      font-size: 40px;
+      cursor: grab;
+      filter: drop-shadow(0 4px 8px rgba(189, 129, 149, 0.35));
+      z-index: 10004;
+      touch-action: none;
+      animation: floatKey 2.5s infinite ease-in-out;
+    }
+
+    #scatteredKey:active {
+      cursor: grabbing;
+      transform: scale(1.2);
+    }
+
+    @keyframes floatKey {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(10deg); }
+    }
+
+    .lock-section {
+      text-align: center;
+      margin: 40px auto 60px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .lock-zone {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #fffdfc, #f9e8ef);
+      border: 2px solid #e9c6d4;
+      border-radius: 28px;
+      padding: 24px 40px;
+      box-shadow: 0 12px 30px #d9b4c322, inset 0 0 0 4px #fff9;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .lock-zone.drag-over {
+      transform: scale(1.06);
+      border-color: #dfadc0;
+      background: #fcecf1;
+    }
+
+    .heart-lock {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #e9b8c9, #d89bb4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      box-shadow: 0 8px 18px rgba(190, 130, 153, 0.3);
+      border: 2px solid #fff;
+    }
+
+    .lock-hint {
+      font-size: 0.98rem;
+      color: #b98296;
+      margin-top: 4px;
+    }
+
+    /* Unlocked Message Modal */
+    .message-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 248, 247, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 10010;
+    }
+
+    .message-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .message-card {
+      background: #fffafc;
+      border-radius: 24px;
+      border: 2px solid #e9c6d4;
+      padding: 30px 25px;
+      text-align: center;
+      max-width: 400px;
+      width: 88vw;
+      box-shadow: 0 16px 36px rgba(190, 130, 153, 0.25);
+      transform: scale(0.88);
+      transition: transform 0.4s ease;
+      cursor: pointer;
+    }
+
+    .message-overlay.active .message-card {
+      transform: scale(1);
+    }
+
+    .message-card h2 {
+      font-family: 'Pacifico', cursive;
+      color: #bd8298;
+      margin-bottom: 12px;
+      font-size: 1.8rem;
+    }
+
+    .message-card p {
+      color: #a77d8b;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .click-continue {
+      font-size: 0.82rem;
+      color: #dfadc0;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     /* Confetti canvas */
@@ -196,35 +293,16 @@
 
     /* Password overlay */
     #passwordOverlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255, 248, 247, 0.97); color:#a9798b; backdrop-filter: blur(12px); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 9999;}
-    #passwordInput { padding: 10px 15px; font-size: 1.2rem; border-radius: 8px; border: 2px solid #ff3333; background: #fffafc; color: #ff6666; margin-top:10px;}
-    #submitPassword { margin-top: 15px; padding: 10px 25px; font-size:1.2rem; border-radius:30px; border:none; background:#dfadc0; color:white; cursor:pointer;}
-    #passwordError { margin-top:10px; color:#c27f97; font-size:1rem; display:none;}
-     #passwordHint {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      color: #b98296;
-      font-style: italic;
-     }
-    .puzzle-intro img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-  
-    #content { min-height: 100vh; height: auto; padding: 70px 24px 55px; }
-    #content > * { position: relative; }
-    #content::before { content: '♡  ✧  ♡'; color: #dfb3c4; letter-spacing: 12px; font-size: 1rem; margin-bottom: 18px; }
-    #content h3 { margin-top: 30px; color: #c69aaa; font-size: 0.9rem; font-weight: 400; letter-spacing: 1px; }
-    #content a { color: #b98296 !important; text-decoration-color: #e4bdcc !important; text-underline-offset: 4px; margin-top: 18px; }
-    .puzzle-intro { text-align: center; margin: 28px auto 10px; }
-    #puzzle-container { max-width: calc(100vw - 28px); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 35px #d9b4c322; }
     #passwordOverlay label { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: #bd8298; }
     #passwordOverlay::before { content: '୨୧'; color: #e2b5c7; font-size: 2.5rem; margin-bottom: 10px; }
-    #submitPassword { box-shadow: 0 6px 16px #d7a8ba55; }
+    #passwordInput { padding: 10px 15px; font-size: 1.2rem; border-radius: 8px; border: 2px solid #ff3333; background: #fffafc; color: #ff6666; margin-top:10px;}
+    #submitPassword { margin-top: 15px; padding: 10px 25px; font-size:1.2rem; border-radius:30px; border:none; background:#dfadc0; color:white; cursor:pointer; box-shadow: 0 6px 16px #d7a8ba55; }
+    #passwordError { margin-top:10px; color:#c27f97; font-size:1rem; display:none;}
+    #passwordHint { margin-top: 8px; font-size: 0.9rem; color: #b98296; font-style: italic; }
+
     @media (max-width: 767px) {
       #left-img, #right-img { opacity: 0.88; }
-      #content { padding-top: 100px; }
+      #content { padding-top: 90px; }
       #puzzle-container { height: 300px; }
       .puzzle-piece { width: 25%; height: 25%; }
     }
@@ -232,15 +310,18 @@
 </head>
 <body>
 
+  <!-- Password Overlay -->
   <div id="passwordOverlay">
     <label for="passwordInput">Enter Password to Access</label>
     <input type="password" id="passwordInput" autocomplete="off" />
     <button id="submitPassword">Enter</button>
     <div id="passwordError">Incorrect password, try again.</div>
-  <div id="passwordHint">hint: our first kiss</div>
+    <div id="passwordHint">hint: our first kiss</div>
   </div>
   
   <div id="hearts-container"></div>
+
+  <!-- Content Section -->
   <div id="content">
     <h1>Time Together:</h1>
     <h2>Happy one and a half years love<3 You make time feel beautiful;)</h2>
@@ -259,13 +340,33 @@
   <img id="right-img" class="float-right" src="images/photo2.jpg" alt="Right Pic" onclick="rightAction()" />
   <div id="fun-message">🎉 Surprise!</div>
 
-     <!-- Image before puzzle -->
-  <img src="https://th.bing.com/th/id/R.2f3daa3f59c7223ef9e40a42ff040c99?rik=wBb8ozesAEZJ7w&pid=ImgRaw&r=0" 
-       style="max-width:10%; height:auto; border-radius:10px;">
-</div>
+  <!-- Image before puzzle -->
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="https://th.bing.com/th/id/R.2f3daa3f59c7223ef9e40a42ff040c99?rik=wBb8ozesAEZJ7w&pid=ImgRaw&r=0" style="max-width:10%; min-width:80px; height:auto; border-radius:10px;">
+  </div>
 
   <!-- Puzzle -->
   <div id="puzzle-container"></div>
+
+  <!-- Scattered Key -->
+  <div id="scatteredKey" draggable="true" title="Drag me to the lock! 🗝️">🗝️</div>
+
+  <!-- Heart Lock Container -->
+  <div class="lock-section">
+    <div class="lock-zone" id="lockZone">
+      <div class="heart-lock" id="heartLock">🔐</div>
+      <p class="lock-hint" id="lockHint">Find the key scattered on screen & drag it here... ♡</p>
+    </div>
+  </div>
+
+  <!-- Secret Message Modal -->
+  <div class="message-overlay" id="messageOverlay" onclick="redirectToGallery()">
+    <div class="message-card">
+      <h2>Unlocked! 🔓✨</h2>
+      <p>You found the key to my heart! I made a sweet gallery of memories just for you...</p>
+      <div class="click-continue">Tap anywhere to open photo gallery ➔</div>
+    </div>
+  </div>
 
   <!-- Audio -->
   <audio id="bg-music" loop>
@@ -357,129 +458,120 @@
   }
 
   function rightAction() {
-      setTimeout(() => { window.open("http://www.staggeringbeauty.com/", "_blank"); }, 2000);
+    setTimeout(() => { window.open("http://www.staggeringbeauty.com/", "_blank"); }, 2000);
   }
 
   // ===== 16-PIECE PUZZLE (Desktop + Touch) =====
-const puzzleContainer = document.getElementById('puzzle-container');
-const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
-let placedCount = 0;
+  const puzzleContainer = document.getElementById('puzzle-container');
+  const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
+  let placedCount = 0;
 
-function checkPiecePosition(el) {
-  const correctRow = Math.floor(el.dataset.index / cols);
-  const correctCol = el.dataset.index % cols;
-  const correctX = correctCol * pieceWidth;
-  const correctY = correctRow * pieceHeight;
+  function checkPiecePosition(el) {
+    const correctRow = Math.floor(el.dataset.index / cols);
+    const correctCol = el.dataset.index % cols;
+    const correctX = correctCol * pieceWidth;
+    const correctY = correctRow * pieceHeight;
 
-  if (Math.abs(parseFloat(el.style.left) - correctX) < 15 &&
-      Math.abs(parseFloat(el.style.top) - correctY) < 15) {
-    el.style.left = correctX + 'px';
-    el.style.top = correctY + 'px';
-    if (!el.classList.contains('correct')) {
-      el.classList.add('correct');
-      el.style.zIndex = 10002;
-      placedCount++;
-    }
+    if (Math.abs(parseFloat(el.style.left) - correctX) < 15 &&
+        Math.abs(parseFloat(el.style.top) - correctY) < 15) {
+      el.style.left = correctX + 'px';
+      el.style.top = correctY + 'px';
+      if (!el.classList.contains('correct')) {
+        el.classList.add('correct');
+        el.style.zIndex = 10002;
+        placedCount++;
+      }
 
-    if (placedCount === 16) {
-      confetti({particleCount:300, spread:160, origin:{y:0.5}});
-      setTimeout(() => alert("🎉 Puzzle completed!"), 100);
+      if (placedCount === 16) {
+        confetti({particleCount:300, spread:160, origin:{y:0.5}});
+        setTimeout(() => alert("🎉 Puzzle completed!"), 100);
 
-     // Create secret button with close
-const secretBtnContainer = document.createElement('div');
-secretBtnContainer.style.position = 'fixed';
-secretBtnContainer.style.top = '50%';
-secretBtnContainer.style.left = '50%';
-secretBtnContainer.style.transform = 'translate(-50%, -50%)';
-secretBtnContainer.style.zIndex = 10005;
-secretBtnContainer.style.display = 'flex';
-secretBtnContainer.style.alignItems = 'center';
-secretBtnContainer.style.gap = '10px';
+        const secretBtnContainer = document.createElement('div');
+        secretBtnContainer.style.position = 'fixed';
+        secretBtnContainer.style.top = '50%';
+        secretBtnContainer.style.left = '50%';
+        secretBtnContainer.style.transform = 'translate(-50%, -50%)';
+        secretBtnContainer.style.zIndex = 10005;
+        secretBtnContainer.style.display = 'flex';
+        secretBtnContainer.style.alignItems = 'center';
+        secretBtnContainer.style.gap = '10px';
 
-const secretBtn = document.createElement('button');
-secretBtn.textContent = "Open Your Letter 💌";
-secretBtn.style.padding = '15px 30px';
-secretBtn.style.background = '#dfadc0';
-secretBtn.style.color = 'white';
-secretBtn.style.fontSize = '1.2rem';
-secretBtn.style.border = 'none';
-secretBtn.style.borderRadius = '24px';
-secretBtn.style.cursor = 'pointer';
+        const secretBtn = document.createElement('button');
+        secretBtn.textContent = "Open Your Letter 💌";
+        secretBtn.style.padding = '15px 30px';
+        secretBtn.style.background = '#dfadc0';
+        secretBtn.style.color = 'white';
+        secretBtn.style.fontSize = '1.2rem';
+        secretBtn.style.border = 'none';
+        secretBtn.style.borderRadius = '24px';
+        secretBtn.style.cursor = 'pointer';
 
-// Open new tab on click
-secretBtn.onclick = () => {
-    window.open('love-letter.html', '_blank');
-};
+        secretBtn.onclick = () => { window.open('love-letter.html', '_blank'); };
 
-// Close button
-const closeBtn = document.createElement('button');
-closeBtn.textContent = '✖';
-closeBtn.style.padding = '5px 10px';
-closeBtn.style.background = '#c99aae';
-closeBtn.style.color = 'white';
-closeBtn.style.border = 'none';
-closeBtn.style.borderRadius = '50%';
-closeBtn.style.cursor = 'pointer';
-closeBtn.onclick = () => secretBtnContainer.remove();
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '✖';
+        closeBtn.style.padding = '5px 10px';
+        closeBtn.style.background = '#c99aae';
+        closeBtn.style.color = 'white';
+        closeBtn.style.border = 'none';
+        closeBtn.style.borderRadius = '50%';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.onclick = () => secretBtnContainer.remove();
 
-// Append both buttons to container
-secretBtnContainer.appendChild(secretBtn);
-secretBtnContainer.appendChild(closeBtn);
-document.body.appendChild(secretBtnContainer);
-
+        secretBtnContainer.appendChild(secretBtn);
+        secretBtnContainer.appendChild(closeBtn);
+        document.body.appendChild(secretBtnContainer);
+      }
     }
   }
-}
 
-function makePieceDraggable(el) {
-  let shiftX, shiftY;
+  function makePieceDraggable(el) {
+    let shiftX, shiftY;
 
-  function startDrag(clientX, clientY) {
-    if (el.classList.contains('correct')) return;
-    shiftX = clientX - el.getBoundingClientRect().left;
-    shiftY = clientY - el.getBoundingClientRect().top;
-    el.style.zIndex = 10003;
-    el.style.cursor = 'grabbing';
+    function startDrag(clientX, clientY) {
+      if (el.classList.contains('correct')) return;
+      shiftX = clientX - el.getBoundingClientRect().left;
+      shiftY = clientY - el.getBoundingClientRect().top;
+      el.style.zIndex = 10003;
+      el.style.cursor = 'grabbing';
+    }
+
+    function moveDrag(clientX, clientY) {
+      el.style.left = clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
+      el.style.top = clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+    }
+
+    function endDrag() {
+      el.style.cursor = 'grab';
+      checkPiecePosition(el);
+    }
+
+    function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
+    function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
+    function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
+    function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
+
+    el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
+    el.addEventListener('touchstart', e => {
+      e.preventDefault();
+      startDrag(e.touches[0].clientX, e.touches[0].clientY);
+      document.addEventListener('touchmove', onTouchMove, {passive:false});
+      document.addEventListener('touchend', onTouchEnd);
+    });
+
+    el.ondragstart = () => false;
   }
 
-  function moveDrag(clientX, clientY) {
-    el.style.left = clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
-    el.style.top = clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement('img');
+    piece.classList.add('puzzle-piece');
+    piece.src = `images/puzzle/piece_${i}.png`;
+    piece.dataset.index = i;
+    piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
+    piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
+    puzzleContainer.appendChild(piece);
+    makePieceDraggable(piece);
   }
-
-  function endDrag() {
-    el.style.cursor = 'grab';
-    checkPiecePosition(el);
-  }
-
-  function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
-  function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
-  function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
-  function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
-
-  el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
-  el.addEventListener('touchstart', e => {
-    e.preventDefault();
-    startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    document.addEventListener('touchmove', onTouchMove, {passive:false});
-    document.addEventListener('touchend', onTouchEnd);
-  });
-
-  el.ondragstart = () => false;
-}
-
-// Initialize puzzle pieces
-for (let i = 0; i < 16; i++) {
-  const piece = document.createElement('img');
-  piece.classList.add('puzzle-piece');
-  piece.src = `images/puzzle/piece_${i}.png`;
-  piece.dataset.index = i;
-  piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
-  piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
-  puzzleContainer.appendChild(piece);
-  makePieceDraggable(piece);
-}
-
 
   // ===== MAKE ELEMENTS DRAGGABLE (SIDE IMAGES) =====
   function makeDraggable(el, floatAnimation) {
@@ -505,7 +597,7 @@ for (let i = 0; i < 16; i++) {
     function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
     function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
     function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
-    function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
+    function onTouchEnd() { document.removeEventListener('touchmove', onTouchEnd); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
 
     el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
     el.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); document.addEventListener('touchmove', onTouchMove); document.addEventListener('touchend', onTouchEnd); });
@@ -516,7 +608,6 @@ for (let i = 0; i < 16; i++) {
   makeDraggable(document.getElementById('left-img'), 'floatSide 4s ease-in-out infinite');
   makeDraggable(document.getElementById('right-img'), 'floatSide 5s ease-in-out infinite');
 
-  // ===== ADJUST SIDE IMAGES FOR MOBILE =====
   function adjustSideImagesForMobile() {
     const left = document.getElementById('left-img');
     const right = document.getElementById('right-img');
@@ -535,46 +626,104 @@ for (let i = 0; i < 16; i++) {
 
   adjustSideImagesForMobile();
   window.addEventListener('resize', adjustSideImagesForMobile);
+
+  // ===== SECRET HEART LOCK & SCATTERED KEY LOGIC =====
+  const key = document.getElementById('scatteredKey');
+  const lockZone = document.getElementById('lockZone');
+  const heartLock = document.getElementById('heartLock');
+  const lockHint = document.getElementById('lockHint');
+  const messageOverlay = document.getElementById('messageOverlay');
+
+  function scatterKey() {
+    const padding = 50;
+    const maxX = window.innerWidth - padding * 2;
+    const maxY = window.innerHeight - padding * 2;
+
+    const x = Math.random() > 0.5 ? Math.random() * (maxX * 0.35) : (maxX * 0.65) + Math.random() * (maxX * 0.35);
+    const y = Math.random() > 0.5 ? Math.random() * (maxY * 0.35) : (maxY * 0.65) + Math.random() * (maxY * 0.35);
+
+    key.style.left = `${Math.max(padding, x)}px`;
+    key.style.top = `${Math.max(padding, y)}px`;
+  }
+
+  scatterKey();
+
+  // Desktop Drag
+  key.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('text/plain', 'key');
+  });
+
+  lockZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    lockZone.classList.add('drag-over');
+  });
+
+  lockZone.addEventListener('dragleave', () => {
+    lockZone.classList.remove('drag-over');
+  });
+
+  lockZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    lockZone.classList.remove('drag-over');
+    unlockHeart();
+  });
+
+  // Mobile Touch Drag
+  let keyDragging = false;
+
+  key.addEventListener('touchstart', (e) => {
+    keyDragging = true;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!keyDragging) return;
+    const touch = e.touches[0];
+    key.style.left = `${touch.clientX - 20}px`;
+    key.style.top = `${touch.clientY - 20}px`;
+
+    const lockRect = lockZone.getBoundingClientRect();
+    if (
+      touch.clientX >= lockRect.left &&
+      touch.clientX <= lockRect.right &&
+      touch.clientY >= lockRect.top &&
+      touch.clientY <= lockRect.bottom
+    ) {
+      lockZone.classList.add('drag-over');
+    } else {
+      lockZone.classList.remove('drag-over');
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (!keyDragging) return;
+    keyDragging = false;
+    const keyRect = key.getBoundingClientRect();
+    const lockRect = lockZone.getBoundingClientRect();
+
+    if (
+      keyRect.left < lockRect.right &&
+      keyRect.right > lockRect.left &&
+      keyRect.top < lockRect.bottom &&
+      keyRect.bottom > lockRect.top
+    ) {
+      unlockHeart();
+    }
+    lockZone.classList.remove('drag-over');
+  });
+
+  function unlockHeart() {
+    key.style.display = 'none';
+    heartLock.textContent = '🔓';
+    lockHint.textContent = 'Unlocked! Opening message... ✧';
+    setTimeout(() => {
+      messageOverlay.classList.add('active');
+    }, 400);
+  }
+
+  function redirectToGallery() {
+    window.open('photo.html', '_blank');
+  }
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
