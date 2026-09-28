@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>♡ our little love corner ♡</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      background: #fff8f7;
+      color: #9b6f7b;
+      font-family: 'Poppins', sans-serif;
+      overflow-y: auto;
+      max-height: 100vh;
+      position: relative;
+      user-select: none;
+    }
+
+    /* Floating hearts container */
+    #hearts-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      color: #e7a9bd;
+      font-size: 20px;
+      user-select: none;
+      animation-name: floatUpDown;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      text-shadow: 0 2px 8px #f4cbd8aa;
+    }
+
+    @keyframes floatUpDown {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-28px); }
+    }
+
+    /* Content container */
+    #content {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    h1 { font-family: 'Pacifico', cursive; font-size: clamp(2.6rem, 7vw, 4rem); color: #bd8298; text-shadow: 0 3px 0 #fff, 0 7px 20px #e9c5d2aa; margin-bottom: 10px; }
+    h2 { font-weight: 400; font-size: clamp(1.15rem, 3vw, 1.8rem); margin-bottom: 25px; color: #b98296; text-shadow: none; }
+    p { font-size: 1.08rem; max-width: 450px; line-height: 1.8; color: #a77d8b; margin-bottom: 32px; }
+    #timer { font-family: 'Poppins', sans-serif; font-size: clamp(1rem, 3vw, 1.4rem); color: #b47f94; background: #fff; border: 1px solid #f0d9e1; border-radius: 22px; padding: 13px 22px; box-shadow: 0 8px 24px #d9b4c31c; margin-bottom: 35px; letter-spacing: 1px; }
+
+    .press-btn{
+  display:block;
+  margin:40px auto;
+  padding:25px 60px;
+  font-size:32px;
+  border:none;
+  border-radius:20px;
+  background: linear-gradient(135deg, #e9b8c9, #d89bb4);
+  color:#fffafc;
+  cursor:pointer;
+  box-shadow: 0 8px 22px rgba(190,130,153,0.22), inset 0 1px 0 #ffffff88;
+  transition:0.3s;
+}
+
+.press-btn:hover{
+  transform:scale(1.08);
+  background: linear-gradient(135deg, #f7dce5, #edc4d4); color: #966779;
+}
+    #play-music { background: #e8b9ca; border: 1px solid #dfadc0; padding: 14px 28px; border-radius: 50px; font-size: 1rem; color: #fff; cursor: pointer; box-shadow: 0 7px 18px #d7a8ba55; transition: background 0.3s, transform 0.3s; user-select: none; }
+    #play-music:hover { background: #d99eb5; transform: translateY(-2px); box-shadow: 0 9px 22px #d7a8ba66; }
+
+    #songs-link { margin-top: 26px; font-size: 0.95rem; color: #b98296; cursor: pointer; text-decoration: underline; text-decoration-color: #e4bdcc; text-underline-offset: 4px; user-select: none; }
+    #songs-link:hover { color: #966779; }
+    .gallery-btn {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #f0d5df;
+    color: #9b6f7b;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-radius: 18px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    transition: 0.25s;
+    border: 1px solid #e7c4d1;
+    box-shadow: 0 4px 12px rgba(190, 130, 153, 0.15);
+  }
+
+  .gallery-btn:hover {
+    background: #cc002a;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(204, 0, 42, 0.5);
+  }
+
+#left-img {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  width: 190px; /* smaller */
+  border-radius: 12px;
+  cursor: grab;
+  z-index: 10001;
+  animation: floatSide 4s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+#right-img {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  width: 300px; /* bigger */
+  border-radius: 12px;
+  cursor: grab;
+  z-index: 10001;
+  animation: floatSide 5s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+/* Floating animation */
+@keyframes floatSide {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(5px, -5px); }
+  50%  { transform: translate(0px, -10px); }
+  75%  { transform: translate(-5px, -5px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+    #fun-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b98296;
+      font-size: 1.2rem;
+      text-shadow: 0 2px 12px #f0d5df;
+      display: none;
+      z-index: 10002;
+    }
+
+    /* Puzzle container */
+    #puzzle-container {
+      width: 600px;
+      height: 400px;
+      border: 2px dashed #dfb3c4;
+      margin: 20px auto;
+      position: relative;
+      background: #fffafc;
+      z-index: 10;
+    }
+    .puzzle-piece {
+      width: 150px;
+      height: 100px;
+      position: absolute;
+      cursor: grab;
+      border-radius: 6px;
+      transition: transform 0.2s;
+    }
+    .puzzle-piece.correct {
+      cursor: default;
+      box-shadow: 0 5px 16px #dba9bd88;
+    }
+
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    /* Password overlay */
+    #passwordOverlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255, 248, 247, 0.97); color:#a9798b; backdrop-filter: blur(12px); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 9999;}
+    #passwordInput { padding: 10px 15px; font-size: 1.2rem; border-radius: 8px; border: 2px solid #ff3333; background: #fffafc; color: #ff6666; margin-top:10px;}
+    #submitPassword { margin-top: 15px; padding: 10px 25px; font-size:1.2rem; border-radius:30px; border:none; background:#dfadc0; color:white; cursor:pointer;}
+    #passwordError { margin-top:10px; color:#c27f97; font-size:1rem; display:none;}
+     #passwordHint {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #b98296;
+      font-style: italic;
+     }
+    .puzzle-intro img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+  
+    #content { min-height: 100vh; height: auto; padding: 70px 24px 55px; }
+    #content > * { position: relative; }
+    #content::before { content: '♡  ✧  ♡'; color: #dfb3c4; letter-spacing: 12px; font-size: 1rem; margin-bottom: 18px; }
+    #content h3 { margin-top: 30px; color: #c69aaa; font-size: 0.9rem; font-weight: 400; letter-spacing: 1px; }
+    #content a { color: #b98296 !important; text-decoration-color: #e4bdcc !important; text-underline-offset: 4px; margin-top: 18px; }
+    .puzzle-intro { text-align: center; margin: 28px auto 10px; }
+    #puzzle-container { max-width: calc(100vw - 28px); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 35px #d9b4c322; }
+    #passwordOverlay label { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: #bd8298; }
+    #passwordOverlay::before { content: '୨୧'; color: #e2b5c7; font-size: 2.5rem; margin-bottom: 10px; }
+    #submitPassword { box-shadow: 0 6px 16px #d7a8ba55; }
+    @media (max-width: 767px) {
+      #left-img, #right-img { opacity: 0.88; }
+      #content { padding-top: 100px; }
+      #puzzle-container { height: 300px; }
+      .puzzle-piece { width: 25%; height: 25%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="passwordOverlay">
+    <label for="passwordInput">Enter Password to Access</label>
+    <input type="password" id="passwordInput" autocomplete="off" />
+    <button id="submitPassword">Enter</button>
+    <div id="passwordError">Incorrect password, try again.</div>
+  <div id="passwordHint">hint: our first kiss</div>
+  </div>
+  
+  <div id="hearts-container"></div>
+  <div id="content">
+    <h1>Time Together:</h1>
+    <h2>Happy one year and one month love! You make time feel beautiful;)</h2>
+    <div id="timer">Calculating...</div>
+    <p>No matter how my day goes, you’ll always be the best part of it.</p>
+    <button id="play-music">press me. now.</button>
+    <div id="songs-link">songs that remind me of you</div>
+    <a href="games.html" target="_blank" style="color: #a00000; text-decoration: underline; font-size: 18px; cursor: pointer;">
+      click here for something fun ♥
+    </a>
+    <h3>Scroll down a bit...</h3>
+  </div>
+
+  <!-- Side images -->
+  <img id="left-img" class="float-left" src="images/photo1.jpg" alt="Left Pic" onclick="leftAction()" />
+  <img id="right-img" class="float-right" src="images/photo2.jpg" alt="Right Pic" onclick="rightAction()" />
+  <div id="fun-message">🎉 Surprise!</div>
+
+     <!-- Image before puzzle -->
+<div class="puzzle-intro">
+  <img src="https://th.bing.com/th/id/R.2f3daa3f59c7223ef9e40a42ff040c99?rik=wBb8ozesAEZJ7w&pid=ImgRaw&r=0" 
+       alt="Puzzle Intro" 
+       style="max-width:10%; height:auto; border-radius:10px;">
+</div>
+
+  <!-- Puzzle -->
+  <div id="puzzle-container"></div>
+
+  <!-- Audio -->
+  <audio id="bg-music" loop>
+    <source src="audio/I will.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+  <audio id="funSound" src="sounds/click.mp3"></audio>
+
+  <canvas id="confetti-canvas"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script>
+  // ===== PASSWORD OVERLAY =====
+  const passwordOverlay = document.getElementById('passwordOverlay');
+  const passwordInput = document.getElementById('passwordInput');
+  const submitBtn = document.getElementById('submitPassword');
+  const errorMsg = document.getElementById('passwordError');
+  const correctPassword = '240325';
+
+  function checkPassword() {
+    if (passwordInput.value === correctPassword) {
+      passwordOverlay.style.display = 'none';
+    } else {
+      errorMsg.style.display = 'block';
+      passwordInput.value = '';
+    }
+  }
+
+  submitBtn.addEventListener('click', checkPassword);
+  passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+  // ===== FLOATING HEARTS =====
+  const heartsContainer = document.getElementById('hearts-container');
+  for (let i = 0; i < 60; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.textContent = '❤';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.top = Math.random() * 100 + 'vh';
+    heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+    heart.style.animationDuration = Math.random() * 4 + 4 + 's';
+    heart.style.animationDelay = Math.random() * 8 + 's';
+    heartsContainer.appendChild(heart);
+  }
+
+  // ===== TIMER =====
+  const timer = document.getElementById('timer');
+  const startDate = new Date('2025-03-24T00:00:00');
+  function updateTimer() {
+    const now = new Date();
+    let diff = now - startDate;
+    const days = Math.floor(diff / (1000*60*60*24)); diff -= days*1000*60*60*24;
+    const hours = Math.floor(diff / (1000*60*60)); diff -= hours*1000*60*60;
+    const minutes = Math.floor(diff / (1000*60)); diff -= minutes*1000*60;
+    const seconds = Math.floor(diff / 1000);
+    timer.textContent = `${days} days, ${hours}h ${minutes}m ${seconds}s`;
+  }
+  setInterval(updateTimer, 1000);
+  updateTimer();
+
+  // ===== MUSIC BUTTON =====
+  const playBtn = document.getElementById('play-music');
+  const bgMusic = document.getElementById('bg-music');
+  let musicPlaying = false;
+  playBtn.addEventListener('click', () => {
+    if (!musicPlaying) { 
+      bgMusic.play(); 
+      musicPlaying = true; 
+      playBtn.textContent = '❤️ playing...'; 
+    } else { 
+      bgMusic.pause(); 
+      musicPlaying = false; 
+      playBtn.textContent = 'press me. now.'; 
+    }
+  });
+
+  // ===== SONGS LINK =====
+  document.getElementById('songs-link').addEventListener('click', () => {
+    window.location.href = 'hearts.html';
+  });
+
+  // ===== SIDE IMAGES ACTIONS =====
+  function leftAction() {
+    document.getElementById("funSound").play();
+    const msg = document.getElementById('fun-message');
+    msg.innerText = "Click the right pic...";
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 2000);
+  }
+
+  function rightAction() {
+      setTimeout(() => { window.open("http://www.staggeringbeauty.com/", "_blank"); }, 2000);
+  }
+
+  // ===== 16-PIECE PUZZLE (Desktop + Touch) =====
+const puzzleContainer = document.getElementById('puzzle-container');
+const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
+let placedCount = 0;
+
+function checkPiecePosition(el) {
+  const correctRow = Math.floor(el.dataset.index / cols);
+  const correctCol = el.dataset.index % cols;
+  const correctX = correctCol * pieceWidth;
+  const correctY = correctRow * pieceHeight;
+
+  if (Math.abs(parseFloat(el.style.left) - correctX) < 15 &&
+      Math.abs(parseFloat(el.style.top) - correctY) < 15) {
+    el.style.left = correctX + 'px';
+    el.style.top = correctY + 'px';
+    if (!el.classList.contains('correct')) {
+      el.classList.add('correct');
+      el.style.zIndex = 10002;
+      placedCount++;
+    }
+
+    if (placedCount === 16) {
+      confetti({particleCount:300, spread:160, origin:{y:0.5}});
+      setTimeout(() => alert("🎉 Puzzle completed!"), 100);
+
+     // Create secret button with close
+const secretBtnContainer = document.createElement('div');
+secretBtnContainer.style.position = 'fixed';
+secretBtnContainer.style.top = '50%';
+secretBtnContainer.style.left = '50%';
+secretBtnContainer.style.transform = 'translate(-50%, -50%)';
+secretBtnContainer.style.zIndex = 10005;
+secretBtnContainer.style.display = 'flex';
+secretBtnContainer.style.alignItems = 'center';
+secretBtnContainer.style.gap = '10px';
+
+const secretBtn = document.createElement('button');
+secretBtn.textContent = "Open Your Letter 💌";
+secretBtn.style.padding = '15px 30px';
+secretBtn.style.background = '#dfadc0';
+secretBtn.style.color = 'white';
+secretBtn.style.fontSize = '1.2rem';
+secretBtn.style.border = 'none';
+secretBtn.style.borderRadius = '24px';
+secretBtn.style.cursor = 'pointer';
+
+// Open new tab on click
+secretBtn.onclick = () => {
+    window.open('love-letter.html', '_blank');
+};
+
+// Close button
+const closeBtn = document.createElement('button');
+closeBtn.textContent = '✖';
+closeBtn.style.padding = '5px 10px';
+closeBtn.style.background = '#c99aae';
+closeBtn.style.color = 'white';
+closeBtn.style.border = 'none';
+closeBtn.style.borderRadius = '50%';
+closeBtn.style.cursor = 'pointer';
+closeBtn.onclick = () => secretBtnContainer.remove();
+
+// Append both buttons to container
+secretBtnContainer.appendChild(secretBtn);
+secretBtnContainer.appendChild(closeBtn);
+document.body.appendChild(secretBtnContainer);
+
+    }
+  }
+}
+
+function makePieceDraggable(el) {
+  let shiftX, shiftY;
+
+  function startDrag(clientX, clientY) {
+    if (el.classList.contains('correct')) return;
+    shiftX = clientX - el.getBoundingClientRect().left;
+    shiftY = clientY - el.getBoundingClientRect().top;
+    el.style.zIndex = 10003;
+    el.style.cursor = 'grabbing';
+  }
+
+  function moveDrag(clientX, clientY) {
+    el.style.left = clientX - shiftX - puzzleContainer.getBoundingClientRect().left + 'px';
+    el.style.top = clientY - shiftY - puzzleContainer.getBoundingClientRect().top + 'px';
+  }
+
+  function endDrag() {
+    el.style.cursor = 'grab';
+    checkPiecePosition(el);
+  }
+
+  function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
+  function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
+  function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
+  function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
+
+  el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
+  el.addEventListener('touchstart', e => {
+    e.preventDefault();
+    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    document.addEventListener('touchmove', onTouchMove, {passive:false});
+    document.addEventListener('touchend', onTouchEnd);
+  });
+
+  el.ondragstart = () => false;
+}
+
+// Initialize puzzle pieces
+for (let i = 0; i < 16; i++) {
+  const piece = document.createElement('img');
+  piece.classList.add('puzzle-piece');
+  piece.src = `images/puzzle/piece_${i}.png`;
+  piece.dataset.index = i;
+  piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
+  piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
+  puzzleContainer.appendChild(piece);
+  makePieceDraggable(piece);
+}
+
+
+  // ===== MAKE ELEMENTS DRAGGABLE (SIDE IMAGES) =====
+  function makeDraggable(el, floatAnimation) {
+    let shiftX, shiftY;
+
+    function startDrag(clientX, clientY) {
+      shiftX = clientX - el.getBoundingClientRect().left;
+      shiftY = clientY - el.getBoundingClientRect().top;
+      el.style.animation = 'none';
+      el.style.cursor = 'grabbing';
+    }
+
+    function moveDrag(clientX, clientY) {
+      el.style.left = clientX - shiftX + 'px';
+      el.style.top = clientY - shiftY + 'px';
+    }
+
+    function endDrag() {
+      el.style.cursor = 'grab';
+      if (floatAnimation) el.style.animation = floatAnimation;
+    }
+
+    function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
+    function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
+    function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
+    function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
+
+    el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
+    el.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); document.addEventListener('touchmove', onTouchMove); document.addEventListener('touchend', onTouchEnd); });
+
+    el.ondragstart = () => false;
+  }
+
+  makeDraggable(document.getElementById('left-img'), 'floatSide 4s ease-in-out infinite');
+  makeDraggable(document.getElementById('right-img'), 'floatSide 5s ease-in-out infinite');
+
+  // ===== ADJUST SIDE IMAGES FOR MOBILE =====
+  function adjustSideImagesForMobile() {
+    const left = document.getElementById('left-img');
+    const right = document.getElementById('right-img');
+
+    if (window.innerWidth < 768) {
+      left.style.width = '80px';
+      right.style.width = '120px';
+    } else {
+      left.style.width = '180px';
+      right.style.width = '310px';
+    }
+
+    left.style.height = 'auto';
+    right.style.height = 'auto';
+  }
+
+  adjustSideImagesForMobile();
+  window.addEventListener('resize', adjustSideImagesForMobile);
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
