@@ -5,88 +5,181 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tic Tic Tic Tac Tac Tac Toes</title>
 <style>
-  body {
-    background: #0d0d0d;
-    color: #ff4d4d;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 20px;
-    user-select: none;
-    min-height: 100vh;
-    margin: 0;
-  }
-  h1 {
-    margin-bottom: 15px;
-    font-size: 2.8rem;
-    text-shadow: 0 0 10px #ff1a1a;
-  }
-  #modeSelect {
-    margin-bottom: 25px;
-    font-size: 1.1rem;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 2px solid #ff4d4d;
-    background: #330000;
-    color: #ff9999;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-  }
-  #modeSelect:hover {
-    background: #ff4d4d;
-    color: #330000;
-  }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+  --pink: #d98fa8;
+  --deep: #a95f7d;
+  --cream: #fffaf7;
+  --rose: #f8e7ed;
+  --text: #795565;
+  --line: #efd3de;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: radial-gradient(circle at 15% 10%, #fff 0, transparent 30%),
+              linear-gradient(145deg, #fffaf7, #fcecf1 55%, #f7e1e9);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  user-select: none;
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body:before, body:after {
+  content: '♡  ✧  ♡';
+  position: fixed;
+  color: #e5b7c8;
+  opacity: .55;
+  font-size: 24px;
+  letter-spacing: 16px;
+  pointer-events: none;
+}
+body:before { top: 18px; left: 20px; }
+body:after { bottom: 18px; right: 10px; transform: rotate(-12deg); }
+
+h1 {
+  margin: 12px 0 15px;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: #b66e8b;
+  text-align: center;
+  text-shadow: 0 3px 0 #fff;
+  letter-spacing: .2px;
+}
+
+label[for="modeSelect"] {
+  font-size: 0.95rem;
+  color: #b28b9b;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+#modeSelect {
+  margin-bottom: 25px;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 10px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: #fffafc;
+  color: #a36c83;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #dcaec01c;
+  outline: none;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+#modeSelect:hover {
+  background: #ffffff;
+  border-color: #e9c6d4;
+  box-shadow: 0 6px 16px #dcaec02d;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 110px);
+  grid-template-rows: repeat(3, 110px);
+  gap: 15px;
+  padding: 20px;
+  border: 2px solid #e9c6d4;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #fffdfcdd, #f9e8efdd);
+  box-shadow: 0 12px 35px #bd81951c, inset 0 0 0 5px #fff9;
+  position: relative;
+}
+
+#board:before {
+  content: '♡  ✧  ♡  ✧  ♡';
+  position: absolute;
+  top: 6px;
+  left: 16px;
+  color: #e5bdcc;
+  opacity: .6;
+  font-size: 11px;
+  letter-spacing: 8px;
+  pointer-events: none;
+}
+
+.cell {
+  background: linear-gradient(145deg, #ffffff, #fceef3);
+  border-radius: 20px;
+  border: 1px solid #f1dce4;
+  font-size: 3.2rem;
+  color: #ff4d4d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #dcaec01a;
+  transition: background 0.3s, transform 0.15s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.cell:hover {
+  background: linear-gradient(145deg, #ffffff, #f8dce6);
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px #dcaec030;
+}
+
+#status {
+  margin-top: 25px;
+  font-size: 1.1rem;
+  color: #a66f85;
+  font-weight: 600;
+  background: #fff9fb;
+  border: 1px solid #f1dce4;
+  border-radius: 20px;
+  padding: 10px 22px;
+  box-shadow: 0 4px 12px #dcaec01a;
+  min-height: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#restartBtn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: 1px solid #dca5b9;
+  background: linear-gradient(135deg, #e9b4c7, #d992ad);
+  color: #fffdfd;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  box-shadow: 0 7px 16px #c987a333;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+#restartBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px #c987a344;
+}
+
+@media (max-width: 480px) {
   #board {
-    display: grid;
-    grid-template-columns: repeat(3, 110px);
-    grid-template-rows: repeat(3, 110px);
-    gap: 15px;
-    box-shadow: 0 0 30px #cc0000aa;
-    padding: 20px;
-    border-radius: 20px;
-    background: #2b0000;
+    grid-template-columns: repeat(3, 85px);
+    grid-template-rows: repeat(3, 85px);
+    gap: 10px;
+    padding: 15px;
   }
   .cell {
-    background: linear-gradient(145deg, #550000, #330000);
-    border-radius: 20px;
-    font-size: 4rem;
-    color: #ff4d4d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: inset 0 0 8px #ff0000cc;
-    transition: background 0.3s, transform 0.15s;
-    user-select: none;
+    font-size: 2.5rem;
   }
-  .cell:hover {
-    background: linear-gradient(145deg, #ff1a1a, #b30000);
-    transform: scale(1.1);
-  }
-  #status {
-    margin-top: 25px;
-    font-size: 1.3rem;
-    text-shadow: 0 0 8px #ff4d4d;
-    min-height: 1.4em;
-  }
-  #restartBtn {
-    margin-top: 20px;
-    padding: 12px 28px;
-    border-radius: 40px;
-    border: none;
-    background: #cc0000;
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    box-shadow: 0 0 20px #cc0000aa;
-    transition: background 0.3s, box-shadow 0.3s;
-    user-select: none;
-  }
-  #restartBtn:hover {
-    background: #ff1a1a;
-    box-shadow: 0 0 30px #ff4d4dcc;
-  }
+}
 </style>
 </head>
 <body>
