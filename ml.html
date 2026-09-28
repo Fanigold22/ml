@@ -86,24 +86,30 @@
       position: fixed;
       top: 50%;
       left: 10px;
-      width: 190px;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
       border-radius: 12px;
       cursor: grab;
       z-index: 10001;
       animation: floatSide 4s ease-in-out infinite;
       transition: transform 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     #right-img {
       position: fixed;
       top: 50%;
       right: 10px;
-      width: 300px;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
       border-radius: 12px;
       cursor: grab;
       z-index: 10001;
       animation: floatSide 5s ease-in-out infinite;
       transition: transform 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     @keyframes floatSide {
@@ -146,11 +152,16 @@
       position: absolute;
       cursor: grab;
       border-radius: 6px;
-      transition: transform 0.2s;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.6);
+      background-image: url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop');
+      background-size: 600px 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .puzzle-piece.correct {
       cursor: default;
       box-shadow: 0 5px 16px #dba9bd88;
+      border: none;
     }
 
     /* Scattered Key & Heart Lock */
@@ -306,7 +317,7 @@
       #left-img, #right-img { opacity: 0.88; }
       #content { padding-top: 90px; }
       #puzzle-container { height: 300px; }
-      .puzzle-piece { width: 25%; height: 25%; }
+      .puzzle-piece { width: 25%; height: 25%; background-size: calc(100vw - 28px) 300px; }
     }
   </style>
 </head>
@@ -326,7 +337,7 @@
   <!-- Content Section -->
   <div id="content">
     <h1>Time Together:</h1>
-    <h2>Happy one and a half years love<3 You make time feel beautiful;)</h2>
+    <h2>Happy one and a half years love&lt;3 You make time feel beautiful;)</h2>
     <div id="timer">Calculating...</div>
     <p>No matter how my day goes, you’ll always be the best part of it.</p>
     <button id="play-music">press me. now.</button>
@@ -337,9 +348,9 @@
     <h3>Scroll down a bit...</h3>
   </div>
 
-  <!-- Side images -->
-  <img id="left-img" class="float-left" src="images/photo1.jpg" alt="Left Pic" onclick="leftAction()" />
-  <img id="right-img" class="float-right" src="images/photo2.jpg" alt="Right Pic" onclick="rightAction()" />
+  <!-- Side images (Replaced missing files with fallback image URLs) -->
+  <img id="left-img" class="float-left" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=300&auto=format&fit=crop" alt="Left Pic" onclick="leftAction()" />
+  <img id="right-img" class="float-right" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=300&auto=format&fit=crop" alt="Right Pic" onclick="rightAction()" />
   <div id="fun-message">🎉 Surprise!</div>
 
   <!-- Puzzle -->
@@ -365,7 +376,6 @@
   <!-- Audio -->
   <audio id="bg-music" loop>
     <source src="audio/I will.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
   </audio>
   <audio id="funSound" src="sounds/click.mp3"></audio>
 
@@ -428,7 +438,7 @@
   let musicPlaying = false;
   playBtn.addEventListener('click', () => {
     if (!musicPlaying) { 
-      bgMusic.play(); 
+      bgMusic.play().catch(() => {}); 
       musicPlaying = true; 
       playBtn.textContent = '❤️ playing...'; 
     } else { 
@@ -445,7 +455,8 @@
 
   // ===== SIDE IMAGES ACTIONS =====
   function leftAction() {
-    document.getElementById("funSound").play();
+    const sound = document.getElementById("funSound");
+    sound.play().catch(() => {});
     const msg = document.getElementById('fun-message');
     msg.innerText = "Click the right pic...";
     msg.style.display = 'block';
@@ -458,17 +469,19 @@
 
   // ===== PUZZLE =====
   const puzzleContainer = document.getElementById('puzzle-container');
-  const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
+  const rows = 4, cols = 4;
   let placedCount = 0;
 
   function checkPiecePosition(el) {
+    const pWidth = puzzleContainer.clientWidth / cols;
+    const pHeight = puzzleContainer.clientHeight / rows;
     const correctRow = Math.floor(el.dataset.index / cols);
     const correctCol = el.dataset.index % cols;
-    const correctX = correctCol * pieceWidth;
-    const correctY = correctRow * pieceHeight;
+    const correctX = correctCol * pWidth;
+    const correctY = correctRow * pHeight;
 
-    if (Math.abs(parseFloat(el.style.left) - correctX) < 15 &&
-        Math.abs(parseFloat(el.style.top) - correctY) < 15) {
+    if (Math.abs(parseFloat(el.style.left) - correctX) < 20 &&
+        Math.abs(parseFloat(el.style.top) - correctY) < 20) {
       el.style.left = correctX + 'px';
       el.style.top = correctY + 'px';
       if (!el.classList.contains('correct')) {
@@ -478,7 +491,7 @@
       }
 
       if (placedCount === 16) {
-        confetti({particleCount:300, spread:160, origin:{y:0.5}});
+        if (window.confetti) confetti({particleCount:300, spread:160, origin:{y:0.5}});
         setTimeout(() => alert("🎉 Puzzle completed!"), 100);
 
         const secretBtnContainer = document.createElement('div');
@@ -557,16 +570,31 @@
     el.ondragstart = () => false;
   }
 
-  for (let i = 0; i < 16; i++) {
-    const piece = document.createElement('img');
-    piece.classList.add('puzzle-piece');
-    piece.src = `images/puzzle/piece_${i}.png`;
-    piece.dataset.index = i;
-    piece.style.left = Math.random() * (puzzleContainer.clientWidth - pieceWidth) + 'px';
-    piece.style.top = Math.random() * (puzzleContainer.clientHeight - pieceHeight) + 'px';
-    puzzleContainer.appendChild(piece);
-    makePieceDraggable(piece);
+  function initPuzzle() {
+    puzzleContainer.innerHTML = '';
+    const pWidth = puzzleContainer.clientWidth / cols;
+    const pHeight = puzzleContainer.clientHeight / rows;
+
+    for (let i = 0; i < 16; i++) {
+      const piece = document.createElement('div');
+      piece.classList.add('puzzle-piece');
+      piece.dataset.index = i;
+      
+      const r = Math.floor(i / cols);
+      const c = i % cols;
+      
+      piece.style.width = pWidth + 'px';
+      piece.style.height = pHeight + 'px';
+      piece.style.backgroundPosition = `-${c * pWidth}px -${r * pHeight}px`;
+      piece.style.left = Math.random() * (puzzleContainer.clientWidth - pWidth) + 'px';
+      piece.style.top = Math.random() * (puzzleContainer.clientHeight - pHeight) + 'px';
+      
+      puzzleContainer.appendChild(piece);
+      makePieceDraggable(piece);
+    }
   }
+
+  window.addEventListener('load', initPuzzle);
 
   // ===== SIDE IMAGES DRAGGABLE =====
   function makeDraggable(el, floatAnimation) {
@@ -602,25 +630,6 @@
 
   makeDraggable(document.getElementById('left-img'), 'floatSide 4s ease-in-out infinite');
   makeDraggable(document.getElementById('right-img'), 'floatSide 5s ease-in-out infinite');
-
-  function adjustSideImagesForMobile() {
-    const left = document.getElementById('left-img');
-    const right = document.getElementById('right-img');
-
-    if (window.innerWidth < 768) {
-      left.style.width = '80px';
-      right.style.width = '120px';
-    } else {
-      left.style.width = '180px';
-      right.style.width = '310px';
-    }
-
-    left.style.height = 'auto';
-    right.style.height = 'auto';
-  }
-
-  adjustSideImagesForMobile();
-  window.addEventListener('resize', adjustSideImagesForMobile);
 
   // ===== KEY & LOCK SCATTERING & CUSTOM JS DRAG =====
   const key = document.getElementById('scatteredKey');
