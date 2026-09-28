@@ -81,7 +81,7 @@
     #content h3 { margin-top: 30px; color: #c69aaa; font-size: 0.9rem; font-weight: 400; letter-spacing: 1px; }
     #content a { color: #b98296 !important; text-decoration-color: #e4bdcc !important; text-underline-offset: 4px; margin-top: 18px; }
 
-    /* Side images */
+    /* Side images (Hidden initially) */
     #left-img {
       position: fixed;
       top: 50%;
@@ -95,6 +95,7 @@
       animation: floatSide 4s ease-in-out infinite;
       transition: transform 0.2s ease;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: none;
     }
 
     #right-img {
@@ -110,6 +111,7 @@
       animation: floatSide 5s ease-in-out infinite;
       transition: transform 0.2s ease;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: none;
     }
 
     @keyframes floatSide {
@@ -348,9 +350,9 @@
     <h3>Scroll down a bit...</h3>
   </div>
 
-  <!-- Side images (Replaced missing files with fallback image URLs) -->
+  <!-- Side images (Using the exact same stock picture as puzzle) -->
   <img id="left-img" class="float-left" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=300&auto=format&fit=crop" alt="Left Pic" onclick="leftAction()" />
-  <img id="right-img" class="float-right" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=300&auto=format&fit=crop" alt="Right Pic" onclick="rightAction()" />
+  <img id="right-img" class="float-right" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=300&auto=format&fit=crop" alt="Right Pic" onclick="rightAction()" />
   <div id="fun-message">🎉 Surprise!</div>
 
   <!-- Puzzle -->
@@ -388,11 +390,16 @@
   const passwordInput = document.getElementById('passwordInput');
   const submitBtn = document.getElementById('submitPassword');
   const errorMsg = document.getElementById('passwordError');
+  const leftImg = document.getElementById('left-img');
+  const rightImg = document.getElementById('right-img');
   const correctPassword = '240325';
 
   function checkPassword() {
     if (passwordInput.value === correctPassword) {
       passwordOverlay.style.display = 'none';
+      // Reveal side images only after unlock
+      leftImg.style.display = 'block';
+      rightImg.style.display = 'block';
       initScatteredLockAndKey();
     } else {
       errorMsg.style.display = 'block';
@@ -628,8 +635,8 @@
     el.ondragstart = () => false;
   }
 
-  makeDraggable(document.getElementById('left-img'), 'floatSide 4s ease-in-out infinite');
-  makeDraggable(document.getElementById('right-img'), 'floatSide 5s ease-in-out infinite');
+  makeDraggable(leftImg, 'floatSide 4s ease-in-out infinite');
+  makeDraggable(rightImg, 'floatSide 5s ease-in-out infinite');
 
   // ===== KEY & LOCK SCATTERING & CUSTOM JS DRAG =====
   const key = document.getElementById('scatteredKey');
