@@ -153,16 +153,16 @@
       box-shadow: 0 5px 16px #dba9bd88;
     }
 
-    /* Scattered Key & Heart Lock (Positioned absolute/fixed far apart, z-index lower than password overlay) */
+    /* Scattered Key & Heart Lock */
     #scatteredKey {
       position: fixed;
       font-size: 42px;
       cursor: grab;
       filter: drop-shadow(0 4px 8px rgba(189, 129, 149, 0.35));
-      z-index: 1000; /* Lower than passwordOverlay (9999) */
+      z-index: 1000;
       touch-action: none;
       animation: floatKey 2.5s infinite ease-in-out;
-      display: none; /* Revealed after password check */
+      display: none;
     }
 
     #scatteredKey:active {
@@ -177,23 +177,19 @@
 
     #scatteredLockZone {
       position: fixed;
-      z-index: 1000; /* Lower than passwordOverlay (9999) */
-      display: none; /* Revealed after password check */
+      z-index: 1000;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #fffdfc, #f9e8ef);
-      border: 2px dashed #e9c6d4;
-      border-radius: 24px;
+      background: transparent;
+      border: none;
       padding: 12px 18px;
-      box-shadow: 0 10px 25px rgba(190, 130, 153, 0.2);
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
     #scatteredLockZone.drag-over {
-      transform: scale(1.1);
-      border-color: #dfadc0;
-      background: #fcecf1;
+      transform: scale(1.15);
     }
 
     .heart-lock {
@@ -317,7 +313,7 @@
 </head>
 <body>
 
-  <!-- Password Overlay (Covers everything until unlocked) -->
+  <!-- Password Overlay -->
   <div id="passwordOverlay">
     <label for="passwordInput">Enter Password to Access</label>
     <input type="password" id="passwordInput" autocomplete="off" />
@@ -355,7 +351,7 @@
   <!-- Puzzle -->
   <div id="puzzle-container"></div>
 
-  <!-- Scattered Key & Scattered Lock (Initially hidden behind password) -->
+  <!-- Scattered Key & Scattered Lock -->
   <div id="scatteredKey" draggable="true" title="Drag me to the lock! 🗝️">🗝️</div>
 
   <div id="scatteredLockZone">
@@ -393,7 +389,6 @@
   function checkPassword() {
     if (passwordInput.value === correctPassword) {
       passwordOverlay.style.display = 'none';
-      // Reveal & scatter key and lock AFTER unlocking password screen
       initScatteredLockAndKey();
     } else {
       errorMsg.style.display = 'block';
@@ -467,7 +462,7 @@
     setTimeout(() => { window.open("http://www.staggeringbeauty.com/", "_blank"); }, 2000);
   }
 
-  // ===== 16-PIECE PUZZLE (Desktop + Touch) =====
+  // ===== PUZZLE =====
   const puzzleContainer = document.getElementById('puzzle-container');
   const rows = 4, cols = 4, pieceWidth = 150, pieceHeight = 100;
   let placedCount = 0;
@@ -579,7 +574,7 @@
     makePieceDraggable(piece);
   }
 
-  // ===== MAKE ELEMENTS DRAGGABLE (SIDE IMAGES) =====
+  // ===== SIDE IMAGES DRAGGABLE =====
   function makeDraggable(el, floatAnimation) {
     let shiftX, shiftY;
 
@@ -603,7 +598,7 @@
     function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
     function onMouseUp(e) { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); endDrag(); }
     function onTouchMove(e) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); }
-    function onTouchEnd() { document.removeEventListener('touchmove', onTouchEnd); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
+    function onTouchEnd() { document.removeEventListener('touchmove', onTouchMove); document.removeEventListener('touchend', onTouchEnd); endDrag(); }
 
     el.onmousedown = e => { startDrag(e.clientX, e.clientY); document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); };
     el.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); document.addEventListener('touchmove', onTouchMove); document.addEventListener('touchend', onTouchEnd); });
@@ -633,7 +628,7 @@
   adjustSideImagesForMobile();
   window.addEventListener('resize', adjustSideImagesForMobile);
 
-  // ===== BOTH KEY AND HEART LOCK ARE SCATTERED FAR APART & SHOWN AFTER PASSWORD =====
+  // ===== KEY & LOCK SCATTERING & DRAG =====
   const key = document.getElementById('scatteredKey');
   const lockZone = document.getElementById('scatteredLockZone');
   const heartLock = document.getElementById('heartLock');
@@ -645,11 +640,9 @@
     const screenWidth = window.innerWidth - padding * 2;
     const screenHeight = window.innerHeight - padding * 2;
 
-    // Place Key randomly on top half / left side
     const keyX = Math.max(padding, Math.random() * (screenWidth * 0.4));
     const keyY = Math.max(padding, Math.random() * (screenHeight * 0.4));
 
-    // Place Lock randomly on bottom half / right side (far away from key)
     const lockX = Math.max(padding, (screenWidth * 0.6) + Math.random() * (screenWidth * 0.35));
     const lockY = Math.max(padding, (screenHeight * 0.5) + Math.random() * (screenHeight * 0.4));
 
@@ -662,7 +655,6 @@
     lockZone.style.display = 'flex';
   }
 
-  // Desktop Drag for Key
   key.addEventListener('dragstart', (e) => {
     e.dataTransfer.setData('text/plain', 'key');
   });
@@ -682,7 +674,6 @@
     unlockHeart();
   });
 
-  // Touch Drag for Key (Mobile)
   let keyDragging = false;
 
   key.addEventListener('touchstart', () => {
