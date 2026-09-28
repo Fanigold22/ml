@@ -159,7 +159,7 @@
       font-size: 42px;
       cursor: grab;
       filter: drop-shadow(0 4px 8px rgba(189, 129, 149, 0.35));
-      z-index: 1000;
+      z-index: 10005;
       touch-action: none;
       animation: floatKey 2.5s infinite ease-in-out;
       display: none;
@@ -167,7 +167,6 @@
 
     #scatteredKey:active {
       cursor: grabbing;
-      transform: scale(1.2);
     }
 
     @keyframes floatKey {
@@ -177,7 +176,7 @@
 
     #scatteredLockZone {
       position: fixed;
-      z-index: 1000;
+      z-index: 10000;
       display: none;
       flex-direction: column;
       align-items: center;
@@ -189,7 +188,7 @@
     }
 
     #scatteredLockZone.drag-over {
-      transform: scale(1.15);
+      transform: scale(1.2);
     }
 
     .heart-lock {
@@ -224,7 +223,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s ease;
-      z-index: 10010;
+      z-index: 20000;
     }
 
     .message-overlay.active {
@@ -294,7 +293,7 @@
       flex-direction:column; 
       justify-content:center; 
       align-items:center; 
-      z-index: 9999;
+      z-index: 99999;
     }
     #passwordOverlay label { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: #bd8298; }
     #passwordOverlay::before { content: '୨୧'; color: #e2b5c7; font-size: 2.5rem; margin-bottom: 10px; }
@@ -352,7 +351,7 @@
   <div id="puzzle-container"></div>
 
   <!-- Scattered Key & Scattered Lock -->
-  <div id="scatteredKey" draggable="true" title="Drag me to the lock! 🗝️">🗝️</div>
+  <div id="scatteredKey" title="Drag me to the lock! 🗝️">🗝️</div>
 
   <div id="scatteredLockZone">
     <div class="heart-lock" id="heartLock">🔐</div>
@@ -628,7 +627,7 @@
   adjustSideImagesForMobile();
   window.addEventListener('resize', adjustSideImagesForMobile);
 
-  // ===== KEY & LOCK SCATTERING & DRAG =====
+  // ===== KEY & LOCK SCATTERING & CUSTOM JS DRAG =====
   const key = document.getElementById('scatteredKey');
   const lockZone = document.getElementById('scatteredLockZone');
   const heartLock = document.getElementById('heartLock');
@@ -653,68 +652,75 @@
     lockZone.style.left = `${lockX}px`;
     lockZone.style.top = `${lockY}px`;
     lockZone.style.display = 'flex';
+
+    setupKeyDrag();
   }
 
-  key.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text/plain', 'key');
-  });
+  function setupKeyDrag() {
+    let active = false;
+    let shiftX = 0;
+    let shiftY = 0;
 
-  lockZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    lockZone.classList.add('drag-over');
-  });
+    function start(e) {
+      active = true;
+      key.style.animation = 'none';
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      shiftX = clientX - key.getBoundingClientRect().left;
+      shiftY = clientY - key.getBoundingClientRect().top;
+    }
 
-  lockZone.addEventListener('dragleave', () => {
-    lockZone.classList.remove('drag-over');
-  });
+    function move(e) {
+      if (!active) return;
+      if (e.cancelable) e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-  lockZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    lockZone.classList.remove('drag-over');
-    unlockHeart();
-  });
+      key.style.left = `${clientX - shiftX}px`;
+      key.style.top = `${clientY - shiftY}px`;
 
-  let keyDragging = false;
+      const keyRect = key.getBoundingClientRect();
+      const lockRect = lockZone.getBoundingClientRect();
 
-  key.addEventListener('touchstart', () => {
-    keyDragging = true;
-  }, { passive: true });
+      if (
+        keyRect.left < lockRect.right &&
+        keyRect.right > lockRect.left &&
+        keyRect.top < lockRect.bottom &&
+        keyRect.bottom > lockRect.top
+      ) {
+        lockZone.classList.add('drag-over');
+      } else {
+        lockZone.classList.remove('drag-over');
+      }
+    }
 
-  document.addEventListener('touchmove', (e) => {
-    if (!keyDragging) return;
-    const touch = e.touches[0];
-    key.style.left = `${touch.clientX - 20}px`;
-    key.style.top = `${touch.clientY - 20}px`;
+    function end() {
+      if (!active) return;
+      active = false;
+      const keyRect = key.getBoundingClientRect();
+      const lockRect = lockZone.getBoundingClientRect();
 
-    const lockRect = lockZone.getBoundingClientRect();
-    if (
-      touch.clientX >= lockRect.left &&
-      touch.clientX <= lockRect.right &&
-      touch.clientY >= lockRect.top &&
-      touch.clientY <= lockRect.bottom
-    ) {
-      lockZone.classList.add('drag-over');
-    } else {
+      if (
+        keyRect.left < lockRect.right &&
+        keyRect.right > lockRect.left &&
+        keyRect.top < lockRect.bottom &&
+        keyRect.bottom > lockRect.top
+      ) {
+        unlockHeart();
+      } else {
+        key.style.animation = 'floatKey 2.5s infinite ease-in-out';
+      }
       lockZone.classList.remove('drag-over');
     }
-  }, { passive: true });
 
-  document.addEventListener('touchend', () => {
-    if (!keyDragging) return;
-    keyDragging = false;
-    const keyRect = key.getBoundingClientRect();
-    const lockRect = lockZone.getBoundingClientRect();
+    key.addEventListener('mousedown', start);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
 
-    if (
-      keyRect.left < lockRect.right &&
-      keyRect.right > lockRect.left &&
-      keyRect.top < lockRect.bottom &&
-      keyRect.bottom > lockRect.top
-    ) {
-      unlockHeart();
-    }
-    lockZone.classList.remove('drag-over');
-  });
+    key.addEventListener('touchstart', start, { passive: false });
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('touchend', end);
+  }
 
   function unlockHeart() {
     key.style.display = 'none';
