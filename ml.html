@@ -131,7 +131,7 @@
       width: 600px;
       height: 400px;
       border: 2px dashed #dfb3c4;
-      margin: 20px auto;
+      margin: 20px auto 50px;
       position: relative;
       background: #fffafc;
       z-index: 10;
@@ -153,15 +153,16 @@
       box-shadow: 0 5px 16px #dba9bd88;
     }
 
-    /* Secret Heart Lock Section */
+    /* Scattered Key & Heart Lock (Positioned absolute/fixed far apart, z-index lower than password overlay) */
     #scatteredKey {
       position: fixed;
-      font-size: 40px;
+      font-size: 42px;
       cursor: grab;
       filter: drop-shadow(0 4px 8px rgba(189, 129, 149, 0.35));
-      z-index: 10004;
+      z-index: 1000; /* Lower than passwordOverlay (9999) */
       touch-action: none;
       animation: floatKey 2.5s infinite ease-in-out;
+      display: none; /* Revealed after password check */
     }
 
     #scatteredKey:active {
@@ -174,57 +175,52 @@
       50% { transform: translateY(-8px) rotate(10deg); }
     }
 
-    .lock-section {
-      text-align: center;
-      margin: 40px auto 60px;
-      z-index: 10;
-      position: relative;
-    }
-
-    .lock-zone {
-      display: inline-flex;
+    #scatteredLockZone {
+      position: fixed;
+      z-index: 1000; /* Lower than passwordOverlay (9999) */
+      display: none; /* Revealed after password check */
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
       background: linear-gradient(135deg, #fffdfc, #f9e8ef);
-      border: 2px solid #e9c6d4;
-      border-radius: 28px;
-      padding: 24px 40px;
-      box-shadow: 0 12px 30px #d9b4c322, inset 0 0 0 4px #fff9;
+      border: 2px dashed #e9c6d4;
+      border-radius: 24px;
+      padding: 12px 18px;
+      box-shadow: 0 10px 25px rgba(190, 130, 153, 0.2);
       transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
-    .lock-zone.drag-over {
-      transform: scale(1.06);
+    #scatteredLockZone.drag-over {
+      transform: scale(1.1);
       border-color: #dfadc0;
       background: #fcecf1;
     }
 
     .heart-lock {
-      width: 70px;
-      height: 70px;
+      width: 60px;
+      height: 60px;
       background: linear-gradient(135deg, #e9b8c9, #d89bb4);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 34px;
-      box-shadow: 0 8px 18px rgba(190, 130, 153, 0.3);
+      font-size: 30px;
+      box-shadow: 0 6px 15px rgba(190, 130, 153, 0.3);
       border: 2px solid #fff;
     }
 
-    .lock-hint {
-      font-size: 0.98rem;
+    .lock-hint-text {
+      font-size: 0.75rem;
       color: #b98296;
-      margin-top: 4px;
+      margin-top: 5px;
+      font-weight: 600;
     }
 
     /* Unlocked Message Modal */
     .message-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(255, 248, 247, 0.88);
+      background: rgba(255, 248, 247, 0.92);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -292,7 +288,18 @@
     }
 
     /* Password overlay */
-    #passwordOverlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255, 248, 247, 0.97); color:#a9798b; backdrop-filter: blur(12px); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index: 9999;}
+    #passwordOverlay { 
+      position: fixed; 
+      top:0; left:0; right:0; bottom:0; 
+      background: rgba(255, 248, 247, 0.98); 
+      color:#a9798b; 
+      backdrop-filter: blur(12px); 
+      display:flex; 
+      flex-direction:column; 
+      justify-content:center; 
+      align-items:center; 
+      z-index: 9999;
+    }
     #passwordOverlay label { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: #bd8298; }
     #passwordOverlay::before { content: '୨୧'; color: #e2b5c7; font-size: 2.5rem; margin-bottom: 10px; }
     #passwordInput { padding: 10px 15px; font-size: 1.2rem; border-radius: 8px; border: 2px solid #ff3333; background: #fffafc; color: #ff6666; margin-top:10px;}
@@ -310,7 +317,7 @@
 </head>
 <body>
 
-  <!-- Password Overlay -->
+  <!-- Password Overlay (Covers everything until unlocked) -->
   <div id="passwordOverlay">
     <label for="passwordInput">Enter Password to Access</label>
     <input type="password" id="passwordInput" autocomplete="off" />
@@ -348,15 +355,12 @@
   <!-- Puzzle -->
   <div id="puzzle-container"></div>
 
-  <!-- Scattered Key -->
+  <!-- Scattered Key & Scattered Lock (Initially hidden behind password) -->
   <div id="scatteredKey" draggable="true" title="Drag me to the lock! 🗝️">🗝️</div>
 
-  <!-- Heart Lock Container -->
-  <div class="lock-section">
-    <div class="lock-zone" id="lockZone">
-      <div class="heart-lock" id="heartLock">🔐</div>
-      <p class="lock-hint" id="lockHint">Find the key scattered on screen & drag it here... ♡</p>
-    </div>
+  <div id="scatteredLockZone">
+    <div class="heart-lock" id="heartLock">🔐</div>
+    <div class="lock-hint-text" id="lockHint">Drag 🗝️ here</div>
   </div>
 
   <!-- Secret Message Modal -->
@@ -389,6 +393,8 @@
   function checkPassword() {
     if (passwordInput.value === correctPassword) {
       passwordOverlay.style.display = 'none';
+      // Reveal & scatter key and lock AFTER unlocking password screen
+      initScatteredLockAndKey();
     } else {
       errorMsg.style.display = 'block';
       passwordInput.value = '';
@@ -627,28 +633,36 @@
   adjustSideImagesForMobile();
   window.addEventListener('resize', adjustSideImagesForMobile);
 
-  // ===== SECRET HEART LOCK & SCATTERED KEY LOGIC =====
+  // ===== BOTH KEY AND HEART LOCK ARE SCATTERED FAR APART & SHOWN AFTER PASSWORD =====
   const key = document.getElementById('scatteredKey');
-  const lockZone = document.getElementById('lockZone');
+  const lockZone = document.getElementById('scatteredLockZone');
   const heartLock = document.getElementById('heartLock');
   const lockHint = document.getElementById('lockHint');
   const messageOverlay = document.getElementById('messageOverlay');
 
-  function scatterKey() {
-    const padding = 50;
-    const maxX = window.innerWidth - padding * 2;
-    const maxY = window.innerHeight - padding * 2;
+  function initScatteredLockAndKey() {
+    const padding = 70;
+    const screenWidth = window.innerWidth - padding * 2;
+    const screenHeight = window.innerHeight - padding * 2;
 
-    const x = Math.random() > 0.5 ? Math.random() * (maxX * 0.35) : (maxX * 0.65) + Math.random() * (maxX * 0.35);
-    const y = Math.random() > 0.5 ? Math.random() * (maxY * 0.35) : (maxY * 0.65) + Math.random() * (maxY * 0.35);
+    // Place Key randomly on top half / left side
+    const keyX = Math.max(padding, Math.random() * (screenWidth * 0.4));
+    const keyY = Math.max(padding, Math.random() * (screenHeight * 0.4));
 
-    key.style.left = `${Math.max(padding, x)}px`;
-    key.style.top = `${Math.max(padding, y)}px`;
+    // Place Lock randomly on bottom half / right side (far away from key)
+    const lockX = Math.max(padding, (screenWidth * 0.6) + Math.random() * (screenWidth * 0.35));
+    const lockY = Math.max(padding, (screenHeight * 0.5) + Math.random() * (screenHeight * 0.4));
+
+    key.style.left = `${keyX}px`;
+    key.style.top = `${keyY}px`;
+    key.style.display = 'block';
+
+    lockZone.style.left = `${lockX}px`;
+    lockZone.style.top = `${lockY}px`;
+    lockZone.style.display = 'flex';
   }
 
-  scatterKey();
-
-  // Desktop Drag
+  // Desktop Drag for Key
   key.addEventListener('dragstart', (e) => {
     e.dataTransfer.setData('text/plain', 'key');
   });
@@ -668,10 +682,10 @@
     unlockHeart();
   });
 
-  // Mobile Touch Drag
+  // Touch Drag for Key (Mobile)
   let keyDragging = false;
 
-  key.addEventListener('touchstart', (e) => {
+  key.addEventListener('touchstart', () => {
     keyDragging = true;
   }, { passive: true });
 
@@ -714,10 +728,10 @@
   function unlockHeart() {
     key.style.display = 'none';
     heartLock.textContent = '🔓';
-    lockHint.textContent = 'Unlocked! Opening message... ✧';
+    lockHint.textContent = 'Unlocked!';
     setTimeout(() => {
       messageOverlay.classList.add('active');
-    }, 400);
+    }, 350);
   }
 
   function redirectToGallery() {
