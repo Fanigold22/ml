@@ -3,166 +3,237 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Some mini gamezzz</title>
+  <title>♡ Some mini gamezzz ♡</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --cream: #fffaf7;
+      --pink: #f8e5e8;
+      --blush: #f1cbd2;
+      --rose: #bd7889;
+      --deep-rose: #925768;
+      --text: #77535d;
+      --card: rgba(255, 255, 255, 0.82);
+      --border: #efd2d8;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      background-color: #0d0d0d;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(ellipse at top left, #fff0f2 0%, transparent 45%),
+        radial-gradient(ellipse at bottom right, #f8e9f1 0%, transparent 42%),
+        var(--cream);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
+      padding: 1px 18px 50px;
       overflow-x: hidden;
     }
 
-    .glow-title {
-      font-size: 3rem;
-      color: #B91C1C;
+    body::before {
+      content: "♡  ✧  ♡  ✧  ♡  ✧  ♡  ✧  ♡";
+      position: fixed;
+      top: 15px;
+      left: 0;
+      width: 100%;
       text-align: center;
-      margin-top: 40px;
-      animation: glow 2s ease-in-out infinite alternate;
+      color: #d9a5b2;
+      font-size: 17px;
+      letter-spacing: 12px;
+      opacity: .65;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    @keyframes glow {
-      from {
-        text-shadow: 0 0 10px #610101, 0 0 20px #610101;
-      }
-      to {
-        text-shadow: 0 0 20px #610101, 0 0 30px #610101;
-      }
+    .glow-title {
+      position: relative;
+      z-index: 1;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      font-weight: 600;
+      color: var(--deep-rose);
+      text-align: center;
+      margin: 62px 0 12px;
+      text-shadow: 0 3px 0 #fff, 0 7px 22px rgba(189, 120, 137, .18);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #b18490;
+      font-size: 1rem;
+      letter-spacing: .04em;
+      margin: 0 auto 28px;
     }
 
     .games-wrapper {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 30px;
+      margin: 24px auto 0;
+      max-width: 760px;
+      gap: 6px;
     }
 
     .game-card {
-      background: #1a1a1a;
-      color: white;
-      padding: 20px;
-      margin: 20px;
-      width: 80%;
-      border: 2px solid #ff4d4d;
-      border-radius: 15px;
+      position: relative;
+      background: var(--card);
+      color: var(--text);
+      padding: 25px 22px;
+      margin: 10px 0;
+      width: min(100%, 620px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
       text-align: center;
-      transition: transform 0.3s ease;
+      box-shadow: 0 8px 24px rgba(164, 111, 127, .09), inset 0 0 0 5px rgba(255,255,255,.5);
+      transition: transform .25s ease, box-shadow .25s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .game-card::before {
+      content: "୨୧";
+      position: absolute;
+      top: 12px;
+      right: 17px;
+      color: #d7a2af;
+      font-size: 18px;
     }
 
     .game-card:hover {
-      transform: scale(1.05);
+      transform: translateY(-4px);
+      box-shadow: 0 13px 28px rgba(164, 111, 127, .15), inset 0 0 0 5px rgba(255,255,255,.65);
+    }
+
+    .game-card h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      color: var(--deep-rose);
+      font-size: 1.65rem;
+      font-weight: 600;
+      margin: 3px 0 8px;
+    }
+
+    .game-card p {
+      color: #a7838d;
+      margin: 0 0 17px;
+      font-size: 1rem;
     }
 
     .game-card a {
+      display: inline-block;
       text-decoration: none;
-      color: #ff4d4d;
-      font-weight: bold;
-      font-size: 1.2rem;
+      color: white;
+      background: linear-gradient(135deg, #d9a2b0, #bd7889);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 10px 27px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.8);
+      box-shadow: 0 4px 12px rgba(189, 120, 137, .2);
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .game-card a:hover {
+      transform: scale(1.04);
+      filter: brightness(1.04);
     }
 
     .memories {
+      position: relative;
+      z-index: 1;
       margin-top: 40px;
       padding: 20px;
       text-align: center;
     }
 
-    .memories h3 {
-      color: #ff4d4d;
+    .memories h3 { color: var(--deep-rose); }
+    .memories ul { list-style: none; padding: 0; }
+    .memories li { margin: 10px 0; font-size: 1.1rem; }
+
+    .heart-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
     }
 
-    .memories ul {
-      list-style: none;
-      padding: 0;
+    .heart {
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      background: #e8b9c5;
+      top: 100vh;
+      left: calc(100% * var(--x));
+      transform: rotate(45deg);
+      animation: floatHearts 11s linear infinite;
+      opacity: .55;
     }
 
-    .memories li {
-      margin: 10px 0;
-      font-size: 1.1rem;
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      background: #e8b9c5;
+      border-radius: 50%;
     }
 
-  .heart-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: -1;
-  }
+    .heart::before { top: -6.5px; left: 0; }
+    .heart::after { left: -6.5px; top: 0; }
 
-  .heart {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    top: 100vh;
-    left: calc(100% * var(--x));
-    transform: rotate(45deg);
-    animation: floatHearts 8s linear infinite;
-  }
+    .heart:nth-child(even),
+    .heart:nth-child(even)::before,
+    .heart:nth-child(even)::after { background: #d9c9e7; }
 
-  .heart::before,
-  .heart::after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    border-radius: 50%;
-  }
+    .heart:nth-child(3n),
+    .heart:nth-child(3n)::before,
+    .heart:nth-child(3n)::after { background: #f0d7b9; }
 
-  .heart::before {
-    top: -10px;
-    left: 0;
-  }
+    @keyframes floatHearts {
+      0% { transform: translateY(0) rotate(45deg); opacity: 0; }
+      12% { opacity: .55; }
+      85% { opacity: .45; }
+      100% { transform: translateY(-115vh) rotate(45deg); opacity: 0; }
+    }
 
-  .heart::after {
-    left: -10px;
-    top: 0;
-  }
-
-  @keyframes floatHearts {
-    0% { transform: translateY(0) rotate(45deg); opacity: 1; }
-    100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
-  }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 <body>
-  <h1 class="glow-title">Mini Games!</h1>
+  <h1 class="glow-title">Mini Games ♡</h1>
+  <p class="subtitle">little games, lots of love ୨୧</p>
 
   <div class="games-wrapper">
     <div class="game-card">
       <h2>Tic-Tac-Toe</h2>
       <p>Hearts in a row!</p>
-      <a href="tic.html" target="_blank">Play</a>
+      <a href="tic.html" target="_blank" rel="noopener">Play ♡</a>
     </div>
     <div class="game-card">
       <h2>Catch the Hearts</h2>
       <p>Catch me if you can!</p>
-      <a href="catch.html" target="_blank">Play</a>
+      <a href="catch.html" target="_blank" rel="noopener">Play ♡</a>
     </div>
     <div class="game-card">
       <h2>Heart Clicker</h2>
       <p>Stay focused!</p>
-      <a href="clicker.html" target="_blank">Play</a>
+      <a href="clicker.html" target="_blank" rel="noopener">Play ♡</a>
     </div>
   </div>
 
-
-  <div class="heart-container">
-    <!-- Add multiple hearts -->
-    <div class="heart" style="--x: 0.1;"></div>
-    <div class="heart" style="--x: 0.3;"></div>
-    <div class="heart" style="--x: 0.5;"></div>
-    <div class="heart" style="--x: 0.7;"></div>
-    <div class="heart" style="--x: 0.9;"></div>
+  <div class="heart-container" aria-hidden="true">
+    <div class="heart" style="--x: 0.1; animation-delay: -2s;"></div>
+    <div class="heart" style="--x: 0.3; animation-delay: -7s;"></div>
+    <div class="heart" style="--x: 0.5; animation-delay: -4s;"></div>
+    <div class="heart" style="--x: 0.7; animation-delay: -9s;"></div>
+    <div class="heart" style="--x: 0.9; animation-delay: -5s;"></div>
   </div>
 </body>
 </html>
-
-
-
 
 
