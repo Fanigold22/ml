@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Our Memory Box ♡</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+  :root {
+    --pink: #d98fa8;
+    --deep: #a95f7d;
+    --cream: #fffaf7;
+    --rose: #f8e7ed;
+    --text: #795565;
+    --line: #efd3de;
+    --shadow: rgba(189, 129, 149, 0.18);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: radial-gradient(circle at 15% 10%, #fff 0, transparent 30%),
+                linear-gradient(145deg, #fffaf7, #fcecf1 55%, #f7e1e9);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    padding: 30px 20px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    position: relative;
+  }
+
+  /* Decorative Sparkles */
+  body:before, body:after {
+    content: '♡  ✧  ♡';
+    position: fixed;
+    color: #e5b7c8;
+    opacity: .55;
+    font-size: 24px;
+    letter-spacing: 16px;
+    pointer-events: none;
+  }
+  body:before { top: 20px; left: 24px; }
+  body:after { bottom: 20px; right: 10px; transform: rotate(-12deg); }
+
+  header {
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    color: #b66e8b;
+    text-shadow: 0 3px 0 #fff;
+    letter-spacing: .2px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: #b28b9b;
+    margin: 0;
+  }
+
+  /* Memory Box Container */
+  .box-container {
+    width: min(92vw, 950px);
+    background: linear-gradient(135deg, #fffdfcdd, #f9e8efdd);
+    border: 2px solid #e9c6d4;
+    border-radius: 30px;
+    padding: 35px 25px;
+    box-shadow: 0 15px 40px var(--shadow), inset 0 0 0 6px #fff9;
+    position: relative;
+  }
+
+  .box-container::before {
+    content: '♡  ✧  MEMORIES  ✧  ♡';
+    position: absolute;
+    top: 14px;
+    left: 24px;
+    color: #e5bdcc;
+    font-size: 12px;
+    letter-spacing: 6px;
+    font-weight: 600;
+  }
+
+  /* Gallery Grid */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+    margin-top: 15px;
+  }
+
+  /* Polaroid Card */
+  .polaroid {
+    background: #fff;
+    padding: 14px 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(189, 129, 149, 0.15);
+    border: 1px solid #f1dce4;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .polaroid:hover {
+    transform: translateY(-8px) rotate(1deg);
+    box-shadow: 0 14px 28px rgba(189, 129, 149, 0.25);
+  }
+
+  /* Cute Tape Accent */
+  .polaroid::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    width: 50px;
+    height: 18px;
+    background: rgba(233, 198, 212, 0.55);
+    backdrop-filter: blur(2px);
+    border: 1px dashed rgba(255, 255, 255, 0.6);
+  }
+
+  .polaroid-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fcecf1;
+    position: relative;
+  }
+
+  .polaroid-img-wrapper img, .polaroid-img-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .polaroid-caption {
+    margin-top: 14px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #a36c83;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+
+  .polaroid-date {
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+    font-size: 0.75rem;
+    color: #c49eb0;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Modal / Lightbox Overlay */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(121, 85, 101, 0.45);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-card {
+    background: #fffafc;
+    border-radius: 28px;
+    border: 2px solid #e9c6d4;
+    width: min(90vw, 680px);
+    padding: 25px;
+    box-shadow: 0 20px 40px rgba(121, 85, 101, 0.25);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+
+  .modal-overlay.active .modal-card {
+    transform: scale(1);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: var(--rose);
+    border: 1px solid var(--line);
+    color: var(--deep);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .close-btn:hover { background: #f1dce4; }
+
+  .media-frame {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #000;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .media-frame video, .media-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .modal-details h2 {
+    font-family: 'Playfair Display', serif;
+    color: #b66e8b;
+    margin: 0 0 6px;
+    font-size: 1.6rem;
+  }
+
+  .modal-note {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 8px 0 14px;
+  }
+
+  .song-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--rose);
+    border: 1px solid var(--line);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--deep);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Our Memory Box ♡</h1>
+  <p class="subtitle">a collection of edits, quiet moments & sweet memories ✧</p>
+</header>
+
+<div class="box-container">
+  <div class="gallery-grid">
+
+    <!-- Memory Card 1 -->
+    <div class="polaroid" onclick="openMemory('Summer Edit 🌺', 'A short montage of our sunny beach days and late-night drives.', '🎵 Golden Hour - JVKE', 'https://www.w3schools.com/html/mov_bbb.mp4')">
+      <div class="polaroid-img-wrapper">
+        <img src="https://picsum.photos/400/400?random=1" alt="Summer Edit Thumbnail" />
+      </div>
+      <div class="polaroid-caption">Summer Sunshine ♡</div>
+      <div class="polaroid-date">JULY 2025</div>
+    </div>
+
+    <!-- Memory Card 2 -->
+    <div class="polaroid" onclick="openMemory('Cozy Rainy Days 🌧️', 'Captured moments staying inside, drinking hot cocoa, and playing mini-games.', '🎵 Lofi Rain Beats', 'https://www.w3schools.com/html/mov_bbb.mp4')">
+      <div class="polaroid-img-wrapper">
+        <img src="https://picsum.photos/400/400?random=2" alt="Cozy Days Thumbnail" />
+      </div>
+      <div class="polaroid-caption">Cozy Afternoons ☕</div>
+      <div class="polaroid-date">OCTOBER 2025</div>
+    </div>
+
+    <!-- Memory Card 3 -->
+    <div class="polaroid" onclick="openMemory('Our Trip ✈️', 'Quick snippets from our favorite trip together!', '🎵 Until I Found You', 'https://www.w3schools.com/html/mov_bbb.mp4')">
+      <div class="polaroid-img-wrapper">
+        <img src="https://picsum.photos/400/400?random=3" alt="Travel Edit Thumbnail" />
+      </div>
+      <div class="polaroid-caption">Adventures Together ✧</div>
+      <div class="polaroid-date">FEBRUARY 2026</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeMemory(event)">
+  <div class="modal-card">
+    <button class="close-btn" onclick="closeMemory(event, true)">✕</button>
+    <div class="media-frame">
+      <video id="modalVideo" controls autoplay loop muted>
+        <source src="" type="video/mp4" />
+      </video>
+    </div>
+    <div class="modal-details">
+      <h2 id="modalTitle">Title</h2>
+      <div class="song-tag" id="modalSong">🎵 Song Title</div>
+      <p class="modal-note" id="modalNote">Memory note goes here...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const overlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalNote = document.getElementById('modalNote');
+  const modalSong = document.getElementById('modalSong');
+  const modalVideo = document.getElementById('modalVideo');
+
+  function openMemory(title, note, song, videoSrc) {
+    modalTitle.textContent = title;
+    modalNote.textContent = note;
+    modalSong.textContent = song;
+    modalVideo.src = videoSrc;
+    overlay.classList.add('active');
+  }
+
+  function closeMemory(event, force = false) {
+    if (force || event.target === overlay) {
+      overlay.classList.remove('active');
+      modalVideo.pause();
+      modalVideo.src = '';
+    }
+  }
+</script>
+
+</body>
+</html>
