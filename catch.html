@@ -1,118 +1,41 @@
-
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Catch biatch</title>
+<title>Catch the Hearts ♡</title>
 <style>
-  body {
-    background: #0d0d0d;
-    color: #b22222; /* deep cherry red */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    user-select: none;
-  }
-  h1 {
-    margin: 20px 0 10px;
-    font-size: 2.8rem;
-    text-shadow: 0 0 8px #b22222cc;
-  }
-  #gameArea {
-    position: relative;
-    width: 90vw;
-    height: 70vh;
-    border: 2px solid #8b0000;
-    border-radius: 20px;
-    background: #330000;
-    box-shadow: 0 0 20px #8b0000cc;
-    overflow: hidden;
-  }
-  .heart {
-    position: absolute;
-    font-size: 40px;
-    color: #9b1c1c; /* softer cherry red */
-    cursor: pointer;
-    user-select: none;
-    animation: pulse 1s infinite ease-in-out;
-    text-shadow: 0 0 4px #7a1414aa;
-    transition: transform 0.15s;
-  }
-  .heart:active {
-    transform: scale(1.3);
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
-  #scoreboard, #highscore, #timer {
-    margin-top: 12px;
-    font-size: 1.3rem;
-    color: #a83333;
-    text-shadow: 0 0 6px #7a1414aa;
-  }
-  #difficulty {
-    margin-top: 15px;
-    font-size: 1.1rem;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 2px solid #b22222;
-    background: #330000;
-    color: #b22222;
-    cursor: pointer;
-    user-select: none;
-  }
-  #startBtn {
-    margin-top: 20px;
-    padding: 12px 28px;
-    border-radius: 40px;
-    border: none;
-    background: #8b0000;
-    color: #ffcccc;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 0 15px #8b0000aa;
-    transition: background 0.3s, box-shadow 0.3s;
-    user-select: none;
-  }
-  #startBtn:hover {
-    background: #a22222;
-    box-shadow: 0 0 25px #a22222cc;
-  }
-  #finalMessage {
-    margin-top: 20px;
-    font-size: 1.4rem;
-    color: #cc9999;
-    text-shadow: 0 0 6px #7a1414aa;
-    min-height: 1.5em;
-  }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+:root{--pink:#d98fa8;--deep:#a95f7d;--cream:#fffaf7;--rose:#f8e7ed;--text:#795565;--line:#efd3de}
+*{box-sizing:border-box}
+body{background:radial-gradient(circle at 15% 10%,#fff 0,transparent 30%),linear-gradient(145deg,#fffaf7,#fcecf1 55%,#f7e1e9);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden;margin:0;display:flex;flex-direction:column;align-items:center;min-height:100vh;height:100vh;padding:12px 14px 18px;user-select:none;position:relative}
+body:before,body:after{content:'♡  ✧  ♡';position:fixed;color:#e5b7c8;opacity:.55;font-size:24px;letter-spacing:16px;pointer-events:none}body:before{top:18px;left:20px}body:after{bottom:18px;right:10px;transform:rotate(-12deg)}
+h1{margin:12px 0 8px;font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,2.8rem);color:#b66e8b;text-align:center;text-shadow:0 3px 0 #fff;letter-spacing:.2px}
+.subtitle{font-size:.95rem;color:#b28b9b;margin:0 0 12px;text-align:center}
+#difficulty{margin:5px 0 14px;font-family:inherit;font-size:1rem;padding:10px 15px;border-radius:24px;border:1px solid var(--line);background:#fffafc;color:#a36c83;cursor:pointer;box-shadow:0 4px 12px #dcaec01c;outline:none}
+#gameArea{position:relative;width:min(90vw,900px);height:58vh;min-height:240px;max-height:540px;border:2px solid #e9c6d4;border-radius:25px;background:linear-gradient(135deg,#fffdfcdd,#f9e8efdd);box-shadow:0 12px 35px #bd81951c,inset 0 0 0 5px #fff9;overflow:hidden}
+#gameArea:before{content:'♡  ✧  ♡  ✧  ♡';position:absolute;inset:12px auto auto 16px;color:#e5bdcc;opacity:.6;font-size:14px;letter-spacing:8px;pointer-events:none}
+.heart{position:absolute;font-size:36px;cursor:pointer;user-select:none;animation:pulse 1s infinite ease-in-out;filter:drop-shadow(0 3px 3px #c8879a38);transition:transform .15s;z-index:1}.heart:active{transform:scale(1.35)}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.13)}}
+#scoreboard,#highscore,#timer{margin-top:10px;font-size:1.1rem;color:#a66f85;font-weight:600;background:#fff9fb;border:1px solid #f1dce4;border-radius:20px;padding:7px 15px;box-shadow:0 4px 12px #dcaec01a}
+.stats{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+#startBtn{margin-top:14px;padding:12px 30px;border-radius:30px;border:1px solid #dca5b9;background:linear-gradient(135deg,#e9b4c7,#d992ad);color:#fffdfd;font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;box-shadow:0 7px 16px #c987a333;transition:transform .2s,box-shadow .2s;user-select:none}#startBtn:hover{transform:translateY(-2px);box-shadow:0 10px 20px #c987a344}#startBtn:disabled{opacity:.6;cursor:default;transform:none}
+#finalMessage{margin-top:12px;font-size:1.05rem;color:#ad6f87;text-align:center;min-height:1.5em;padding:0 10px}
+@media(max-height:700px){h1{margin:4px 0 2px}.subtitle{margin-bottom:4px}#difficulty{margin:3px 0 8px;padding:7px 12px}#gameArea{height:48vh;min-height:190px}.stats #scoreboard,.stats #highscore,.stats #timer{margin-top:7px;padding:5px 11px;font-size:1rem}#startBtn{margin-top:8px;padding:9px 24px}#finalMessage{margin-top:6px}}
 </style>
 </head>
 <body>
-
-<h1>Catch the Hearts ❤️</h1>
-
+<h1>Catch the Hearts ♡</h1>
+<p class="subtitle">a tiny little love-filled challenge ✧</p>
 <select id="difficulty" aria-label="Select difficulty level">
-  <option value="easy">Easy (Hearts every 1.2s)</option>
-  <option value="medium" selected>Medium (Hearts every 0.7s)</option>
-  <option value="hard">Hard (Hearts every 0.4s)</option>
+  <option value="easy">Easy · hearts every 1.2s</option>
+  <option value="medium" selected>Medium · hearts every 0.7s</option>
+  <option value="hard">Hard · hearts every 0.4s</option>
 </select>
-
 <div id="gameArea" aria-label="Catch the floating hearts game area"></div>
-
-<div id="scoreboard">Score: 0</div>
-<div id="highscore">High Score: 0</div>
-<div id="timer">Time: 30s</div>
-
-<button id="startBtn" aria-label="Start the Catch the Hearts game">Start Game</button>
-
+<div class="stats"><div id="scoreboard">Score: 0</div><div id="highscore">High Score: 0</div><div id="timer">Time: 30s</div></div>
+<button id="startBtn" aria-label="Start the Catch the Hearts game">Start Game ♡</button>
 <div id="finalMessage" aria-live="polite" aria-atomic="true"></div>
-
 <script>
   const gameArea = document.getElementById('gameArea');
   const scoreboard = document.getElementById('scoreboard');
@@ -121,110 +44,81 @@
   const startBtn = document.getElementById('startBtn');
   const finalMessage = document.getElementById('finalMessage');
   const difficultySelect = document.getElementById('difficulty');
-
   let score = 0;
   let timeLeft = 30;
   let gameInterval;
   let heartInterval;
   let gameActive = false;
-  let heartSpawnDelay = 700; // default medium difficulty
-
-  // Load high score from localStorage
-  let highScore = localStorage.getItem('catchHeartsHighScore') || 0;
+  let heartSpawnDelay = 700;
+  let highScore = Number(localStorage.getItem('catchHeartsHighScore') || 0);
   highscoreEl.textContent = `High Score: ${highScore}`;
-
   difficultySelect.addEventListener('change', () => {
     const val = difficultySelect.value;
     if(val === 'easy') heartSpawnDelay = 1200;
     else if(val === 'medium') heartSpawnDelay = 700;
     else if(val === 'hard') heartSpawnDelay = 400;
   });
-
   function randomPosition() {
-    const maxX = gameArea.clientWidth - 40; // heart width approx 40px
-    const maxY = gameArea.clientHeight - 40;
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    return {x, y};
+    const maxX = Math.max(0, gameArea.clientWidth - 42);
+    const maxY = Math.max(0, gameArea.clientHeight - 42);
+    return {x: Math.random() * maxX, y: Math.random() * maxY};
   }
-
   function createHeart() {
     if (!gameActive) return;
-
     const heart = document.createElement('div');
     heart.classList.add('heart');
-    heart.textContent = '❤️';
+    heart.textContent = Math.random() > .5 ? '💗' : '♡';
     const {x, y} = randomPosition();
     heart.style.left = `${x}px`;
     heart.style.top = `${y}px`;
-
     heart.addEventListener('click', () => {
       if (!gameActive) return;
       score++;
       scoreboard.textContent = `Score: ${score}`;
       heart.remove();
     });
-
     gameArea.appendChild(heart);
-
-    setTimeout(() => {
-      if (heart.parentNode) heart.remove();
-    }, 1500);
+    setTimeout(() => { if (heart.parentNode) heart.remove(); }, 1500);
   }
-
   function updateTimer() {
-    if(timeLeft <= 0) {
-      endGame();
-      return;
-    }
+    if(timeLeft <= 0) { endGame(); return; }
     timeLeft--;
     timerEl.textContent = `Time: ${timeLeft}s`;
   }
-
   function startGame() {
     if (gameActive) return;
-    score = 0;
-    timeLeft = 30;
+    score = 0; timeLeft = 30;
     scoreboard.textContent = `Score: ${score}`;
     timerEl.textContent = `Time: ${timeLeft}s`;
     finalMessage.textContent = '';
     gameActive = true;
-
-    // Clear existing hearts
     gameArea.innerHTML = '';
-
-    // Spawn hearts according to difficulty
+    createHeart();
     heartInterval = setInterval(createHeart, heartSpawnDelay);
-
-    // Update timer every second
     gameInterval = setInterval(updateTimer, 1000);
-
     startBtn.disabled = true;
+    startBtn.textContent = 'Catching hearts… ♡';
     difficultySelect.disabled = true;
   }
-
   function endGame() {
     gameActive = false;
     clearInterval(gameInterval);
     clearInterval(heartInterval);
-
     if(score > highScore){
       highScore = score;
       localStorage.setItem('catchHeartsHighScore', highScore);
       highscoreEl.textContent = `High Score: ${highScore}`;
-      finalMessage.textContent = `New high score! You caught ${score} hearts. ❤️🔥`;
+      finalMessage.textContent = `New high score! You caught ${score} hearts. ♡ ✧`;
     } else {
-      finalMessage.textContent = `Game over! You caught ${score} hearts. ❤️`;
+      finalMessage.textContent = `All done! You caught ${score} hearts. So sweet! ♡`;
     }
-
     startBtn.disabled = false;
+    startBtn.textContent = 'Play Again ♡';
     difficultySelect.disabled = false;
+    gameArea.querySelectorAll('.heart').forEach(heart => heart.remove());
   }
-
   startBtn.addEventListener('click', startGame);
-
 </script>
-
 </body>
 </html>
 
